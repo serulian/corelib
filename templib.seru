@@ -1,5 +1,3 @@
-/* Temporary core library with fake types to enable type checking */
-
 @•typealias('stringable')
 interface Stringable {
 	function<string> String()
