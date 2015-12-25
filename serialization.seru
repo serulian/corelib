@@ -1,0 +1,61 @@
+from webidl`core` import JSON as NativeJSON
+from webidl`core` import Object
+from webidl`core` import String as NativeString
+from webidl`internal` import __serulian_internal as Internal
+
+/**
+ * JSON defines serialization to/from JSON.
+ */
+@•typealias('json')
+class JSON {
+	/**
+	 * Get returns a JSON serializer.
+	 */
+	constructor Get() {
+		return JSON.new()
+	}
+
+	/**
+	 * Stringify returns the JSON string form of the given mapping.
+	 */
+	function<string> Stringify(value mapping<any>) {
+		return string(NativeJSON.stringify(Object(value)))
+	}
+
+	/**
+	 * Parse parses the given JSON string into a Mapping. Will reject on a parse error.
+	 */
+	function<mapping<any>> Parse(value string) {
+		return mapping<any>(NativeJSON.parse(NativeString(value), Internal.autoNominalWrap))
+	}
+}
+
+/**
+ * Stringifier defines an interface for converting a Mapping into a string form.
+ */
+@•typealias('$stringifier')
+interface Stringifier {
+	constructor Get() {
+		return JSON.new()
+	}
+
+	/**
+	 * Stringify converts a Mapping into a string form.
+	 */
+	function<string> Stringify(value mapping<any>)
+}
+
+/**
+ * Parser defines an interface for parsing a string into a Mapping.
+ */
+@•typealias('$parser')
+interface Parser {
+	constructor Get() {
+		return JSON.new()
+	}
+
+	/**
+	 * Parse parses the given string into a Mapping. Should reject on failure.
+	 */
+	function<mapping<any>> Parse(value string)
+}

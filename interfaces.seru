@@ -1,0 +1,87 @@
+from helpertypes import Tuple
+
+/**
+ * Stringable marks a type as being convertable into a string.
+ */
+@•typealias('stringable')
+interface Stringable {
+    /**
+     * String returns the string form of the instance.
+     */
+	function<string> String()
+}
+
+/**
+ * Stream defines a stream of values of a type.
+ */
+@•typealias('stream')
+interface Stream<T> {
+	/**
+	 * Next returns a Tuple containing the next value in the stream (if any). If none, the boolean
+	 * of the tuple is false.
+	 */
+	function<Tuple<T, bool>> Next()
+}
+
+/**
+ * Streamable marks a type as supporting being convertable into a stream.
+ */
+@•typealias('streamable')
+interface Streamable<T> {
+	/**
+	 * Stream returns the stream form of the instance.
+	 */
+	function<Stream<T>> Stream()
+}
+
+/**
+ * Mappable marks a type as supporting being used as a key in a Map.
+ */
+@•typealias('mappable')
+interface Mappable {
+	/**
+	 * MapKey returns the stringable mapping key for this type.
+	 */
+	property<Stringable> MapKey { get }
+}
+
+/**
+ * Promise defines an interface for awaiting the result of an async operation.
+ */
+@•typealias('promise')
+interface Promise<T> {
+	/**
+	 * Then registers a callback to invoked with the async result once the operation
+	 * completes successfully.
+	 */
+	function<Promise<T>> Then(callback function<void>(T))
+
+	/**
+	 * Catch registers a callback to invoked with the error if the operation
+	 * fails to complete successfully.
+	 */
+	function<Promise<T>> Catch(callback function<void>(error))
+}
+
+/**
+ * Error defines an error raised by a promise or a reject keyword.
+ */
+@•typealias('error')
+interface Error {
+	/**
+	 * Message defines the error's human-readable message.
+	 */
+	property<string> Message { get }
+}
+
+/**
+ * Releasable defines an interface for a type that can be used via a 'with' keyword.
+ */
+@•typealias('releasable')
+interface Releasable {
+    /**
+     * Release defines the function invoked once the resource has left the scope of the
+     * with block.
+     */
+	function<void> Release()
+}

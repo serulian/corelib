@@ -1,0 +1,217 @@
+from webidl`core` import Number
+from webidl`core` import String as NativeString
+from webidl`core` import Boolean as NativeBoolean
+from webidl`core` import Array
+from webidl`core` import Math
+
+from helpertypes import IntStream
+
+/**
+ * Type marker for functions.
+ */
+@•typealias('function')
+class functionType<T> {}
+
+/**
+ * Integer wraps a Number as an int type.
+ */
+@•typealias('int')
+type Integer : Number {
+	/**
+	 * Range returns a range of integers.
+	 */
+	operator Range(start int, end int) {
+		return IntStream.OverRange(start, end)
+	}
+
+	operator Plus(left int, right int) {
+		return Integer(Number(left) + Number(right))
+	}
+
+	operator Minus(left int, right int) {
+		return Integer(Number(left) - Number(right))
+	}
+
+	operator Times(left int, right int) {
+		return Integer(Number(left) * Number(right))
+	}
+
+	operator Div(left int, right int) {
+		return Float64(Number(left) / Number(right)).Floor()
+	}
+
+	operator Mod(left int, right int) {
+		return Integer(Number(left) % Number(right))
+	}
+
+	operator Compare(left int, right int) {
+		return left - right
+	}
+
+	operator Equals(left int, right int) {
+		return Boolean(Number(left) == Number(right))
+	}
+
+	/**
+	 * String returns the String form of the integer.
+	 */
+	function<string> String() {
+		return String(Number(this).toString())
+	}
+
+	/**
+	 * AsFloat returns this integer as a float.
+	 */
+	function<float64> AsFloat() {
+		return float64(Number(this))
+	}
+}
+
+/**
+ * Float64 wraps a Number as a float type.
+ */
+@•typealias('float64')
+type Float64 : Number {
+	/**
+	 * String returns the String form of the float.
+	 */
+	function<string> String() {
+		return String(Number(this).toString())
+	}
+
+	operator Plus(left float64, right float64) {
+		return Float64(Number(left) + Number(right))
+	}
+
+	operator Minus(left float64, right float64) {
+		return Float64(Number(left) - Number(right))
+	}
+
+	operator Times(left float64, right float64) {
+		return Float64(Number(left) * Number(right))
+	}
+
+	operator Div(left float64, right float64) {
+		return Float64(Number(left) / Number(right))
+	}
+
+	operator Equals(left float64, right float64) {
+		return Boolean(Number(left) == Number(right))
+	}
+
+	/**
+	 * Floor returns the current float rounded down to the nearest integer.
+	 */
+	function<int> Floor() {
+		return Integer(Math.floor(Number(this)))
+	}
+
+	/**
+	 * Ceil returns the current float rounded up to the nearest integer.
+	 */
+	function<int> Ceil() {
+		return Integer(Math.ceil(Number(this)))
+	}
+
+	/**
+	 * Round returns the current float rounded to the nearest integer.
+	 */
+	function<int> Round() {
+		return Integer(Math.round(Number(this)))
+	}
+}
+
+/**
+ * Boolean wraps a NativeBoolean.
+ */
+@•typealias('bool')
+type Boolean : NativeBoolean {
+	/**
+	 * String returns the String form of the Boolean.
+	 */
+	function<string> String() {
+		return String(NativeBoolean(this).toString())
+	}
+}
+
+/**
+ * formatTemplateString formats the given pieces and values into a string value.
+ */
+function<string> formatTemplateString(pieces []string, values []stringable) {
+	var overallPieces = Array.new()
+
+	for i in 0 .. (pieces.Length - 1) {
+		overallPieces.push(NativeString(pieces[i]))
+
+		if i < values.Length {
+			overallPieces.push(NativeString(values[i].String()))
+		}
+	}
+
+	return String(overallPieces.join(NativeString('')))
+}
+
+/**
+ * String wraps a NativeString.
+ */
+@•typealias('string')
+type String : NativeString {
+	operator Equals(first string, second string) {
+		return Boolean(NativeString(first) == NativeString(second))
+	}
+
+	operator Plus(first string, second string) {
+		return String(NativeString(first) + NativeString(second))
+	}
+
+	operator<string> Slice(startindex int?, endindex int?) {
+		var start = startindex ?? 0
+		var end = endindex ?? this.Length
+
+		if start < 0 {
+			start = start + this.Length
+		}
+
+		if end < 0 {
+			end = end + this.Length
+		}
+
+		if start >= end {
+			return ''
+		}
+
+		return String(NativeString(this).substring(Number(start), Number(end)))
+	}
+
+	/**
+	 * Trim removes all whitespace from the left and right sides of the string.
+	 */
+	function<string> Trim() {
+	   return String(NativeString(this).trim())
+	}
+
+	/**
+	 * Split splits the string into a slice of strings based on a delimeter.
+	 */
+	function<[]string> Split(separator string, limit int?) {
+		var arr = NativeString(this).split(NativeString(separator), Number(limit ?? -1))
+		return slice<string>.ForArray(arr)
+	}
+
+	function<string> String() {
+		return this
+	}
+
+	property<stringable> MapKey {
+		get { return this }
+	}
+
+	/**
+	 * Length returns the length of the string.
+	 */
+	property<int> Length {
+		get {
+			return Integer(NativeString(this).length)
+		}
+	}
+}
