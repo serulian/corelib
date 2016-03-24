@@ -1,0 +1,50 @@
+class Tuple<T, Q> {
+	var<T?> First = null
+	var<Q?> Second = null
+
+	constructor Build(first T?, second Q?) {
+		var tuple = Tuple<T, Q>.new()
+		tuple.First = first
+		tuple.Second = second
+		return tuple
+	}
+}
+
+/**
+ * IntStream represents a stream of integers.
+ */
+class IntStream {
+	var<int> start
+	var<int> end
+	var<int> current
+
+	constructor OverRange(start int, end int) {
+		return IntStream{
+			start: start,
+			end: end,
+			current: 0,
+		}
+	}
+
+	function<Tuple<int, bool>> Next() {
+		if this.current <= this.end {
+			var t = Tuple<int, bool>.Build(this.current, true)
+			this.current = this.current + 1
+			return t
+		}
+
+		return Tuple<int, bool>.Build(this.current, false)
+	}
+}
+
+type SimpleError : string {
+	constructor WithMessage(message string) {
+		return SimpleError(message)
+	}
+
+	property<string> Message {
+		get {
+			return string(this)
+		}
+	}
+}

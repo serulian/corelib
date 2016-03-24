@@ -1,0 +1,430 @@
+from webidl`core` import Array
+from webidl`core` import Number
+from webidl`core` import Object
+from webidl`core` import String as NativeString
+from primitives import Integer
+from helpertypes import SimpleError
+from helpertypes import Tuple
+
+/**
+ * listStream defines a stream over the contents of a list.
+ */
+class listStream<I> {
+	var<List<I>> list
+	var<int> index = 0
+
+	constructor For(list List<I>) {
+		return listStream<I>{
+			list: list,
+		}
+	}
+
+	function<Tuple<I, bool>> Next() {
+		if this.index >= this.list.Count {
+			return Tuple<I, bool>.Build(null, false)
+		}
+
+		this.index = this.index + 1
+		return Tuple<I, bool>.Build(this.list[this.index - 1], true)
+	}
+}
+
+/**
+ * sliceStream defines a stream over the contents of a slice.
+ */
+class sliceStream<I> {
+	var<Slice<I>> slice
+	var<int> index = 0
+
+	constructor For(slice Slice<I>) {
+		return sliceStream<I>{
+			slice: slice,
+		}
+	}
+
+	function<Tuple<I, bool>> Next() {
+		if this.index >= this.slice.Length {
+			return Tuple<I, bool>.Build(null, false)
+		}
+
+		this.index = this.index + 1
+		return Tuple<I, bool>.Build(this.slice[this.index - 1], true)
+	}
+}
+
+/**
+ * Mapping defines a well-typed static (read-only) map between string keys to items.
+ */
+@•typealias('mapping')
+type Mapping<T> : Object {
+	/**
+	 * Empty returns an empty mapping.
+	 */
+	constructor Empty() {
+	    return Mapping<T>(Object.new())
+	}
+
+	/**
+	 * overObject returns a Mapping over the native object.
+	 */
+	constructor overObject(obj Object) {
+		return Mapping<T>(obj)
+	}
+
+	/**
+	 * Keys returns a slice of the keys currently in the Mapping.
+	 */
+	property<[]string> Keys {
+		get {
+			return Slice<string>.overArray(Object.keys(Object(this)))
+		}
+	}
+
+	operator SetIndex(key string, value any) {
+		var o = Object(this)
+		o[NativeString(key)] = value
+	}
+
+	operator<T?> Index(key string) {
+		var value = Object(this)[NativeString(key)]
+		if value is null {
+			return null
+		}
+
+		return value.(T)
+	}	
+}
+
+
+/**
+ * Slice defines a well-typed static (read-only) list of items.
+ */
+@•typealias('slice')
+type Slice<T> : Array {
+	/**
+	 * Empty returns an empty slice.
+	 */
+	constructor Empty() {
+	    return Slice<T>(Array.new())
+	}
+
+	/**
+	 * From returns a slice representing the items in the stream.
+	 */
+	constructor From(items T*) {
+		var s = Slice<T>.Empty()
+		for i in items {
+			Array(s).push(i)
+		}
+		return s
+	}
+
+	/**
+	 * ForArray returns a slice over the specified array.
+	 */
+	constructor ForArray(arr Array) {
+		return Slice<T>.overArray(arr)
+	}
+
+	/**
+	 * overArray returns a slice over the specified array.
+	 */
+	constructor overArray(arr Array) {
+		return Slice<T>(arr)
+	}
+
+	operator<T> Index(index int) {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Length + index
+		}
+
+		if finalIndex >= this.Length || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		return Array(this)[Number(finalIndex)].(T)
+	}
+
+	/**
+	 * Stream returns a stream of all the items in the slice.
+	 */
+	function<T*> Stream() {
+		return sliceStream<T>.For(this)
+	}
+
+	/**
+	 * Length returns the length of the slice.
+	 */
+	property<int> Length {
+		get {
+			return int(Array(this).length)
+		}
+	}
+}
+
+/**
+ * List defines a well-typed list of items.
+ */
+@•typealias('list')
+class List<T> {
+	var<Array> internalArray = Array.new()
+	var<Array> indexArray = Array.new()
+
+	/**
+	 * forArray creates a List for the given array.
+	 */
+	constructor forArray(arr Array) {
+		var l = List<T>.Empty()
+		for i in 0 .. (Integer(arr.length) - 1) {
+			l.Add(arr[Number(i)].(T))
+		}
+		return l
+	}
+
+	/**
+	 * Empty returns an empty list.
+	 */
+	constructor Empty() {
+		return List<T>.new()
+	}
+
+	/**
+	 * CopyOf returns a List which is a copy of the given list.
+	 */
+	constructor CopyOf(other List<T>) {
+		var l = List<T>.Empty()
+		l.internalArray = other.internalArray.slice(0)
+		l.indexArray = other.indexArray.slice(0)
+		return l
+	}
+
+	/**
+	 * Of returns a List populated by the contents of the stream.
+	 */
+	constructor Of(stream T*) {
+		var l = List<T>.Empty()
+		for item in stream {
+			l.Add(item)
+		}
+		return l
+	}
+
+	operator<Slice<T>> Slice(startindex int?, endindex int?) {
+		var start = startindex ?? 0
+		var end = endindex ?? this.Count
+
+		if start < 0 {
+			start = start + this.Count
+		}
+
+		if end < 0 {
+			end = end + this.Count
+		}
+
+		if start >= end {
+			return Slice<T>.Empty()
+		}
+
+		return Slice<T>.overArray(this.internalArray.slice(Number(start), Number(end)))
+	}
+
+	operator<T> Index(index int) {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Count + index
+		}
+
+		if finalIndex >= this.Count || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		return this.internalArray[Number(finalIndex)].(T)
+	}
+
+	operator SetIndex(index int, value T) {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Count + index
+		}
+
+		if finalIndex >= this.Count || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		this.internalArray[Number(finalIndex)] = value
+	}
+
+	/**
+	 * Stream returns a stream of all the items in the list.
+	 */
+	function<stream<T>> Stream() {
+		return listStream<T>.For(this)
+	}
+
+	/**
+	 * Add adds the given element to the list.
+	 */
+	function<void> Add(element T) {
+		this.internalArray.push(element)
+		this.indexArray.push(&element)
+	}
+
+	/**
+	 * Remove removes the given element from the list, if it is present. Note that this
+	 * will only remove the first instance found (if any).
+	 */
+	function<void> Remove(element T) {
+	   var index = this.IndexOf(element)
+	   if index is null {
+ 	   	 return
+ 	   }
+
+ 	   this.internalArray.splice(Number(index), Number(1))
+	}
+
+	/**
+	 * IndexOf returns the index of the element in this list or null if none.
+	 */
+	function<int?> IndexOf(element T, startIndex int?) {
+		var finalIndex = startIndex ?? 0
+		var foundIndex = int(this.indexArray.indexOf(&element, Number(finalIndex)))
+		if foundIndex < 0 {
+			return null
+		}
+
+		return foundIndex
+	}
+
+	/**
+	 * Count returns the number of elements in the list.
+	 */
+	property<int> Count {
+		get {
+			return Integer(this.internalArray.length)
+		}
+	}
+}
+
+/**
+ * Set defines a well-typed set of items.
+ */
+@•typealias('set')
+class Set<T : mappable> {
+	var<Object> keyMap = Object.new()
+	var<List<T>> keys = List<T>.Empty()
+
+	/**
+	 * Empty returns an empty set.
+	 */
+	constructor Empty() {
+		return Set<T>.new()
+	}
+
+	/**
+	 * Add adds the given item to the set (if not already present). Returns true if the item
+	 * was added.
+	 */
+	function<bool> Add(item T) {
+		if this.Contains(item) {
+			return false
+		}
+
+		this.keys.Add(item)
+		this.keyMap[NativeString(item.MapKey.String())] = true
+		return true
+	}
+
+	/**
+	 * Remove removes the given item from the set (if present). Returns true if the item
+	 * was removed.
+	 */
+	function<bool> Remove(item T) {
+		if !this.Contains(item) {
+			return false
+		}
+
+		this.keys.Remove(item)
+		this.keyMap[NativeString(item.MapKey.String())] = null
+		return true
+	}
+
+	/**
+	 * Contains returns true if the set contains the specified item.
+	 */
+	function<bool> Contains(item T) {
+		return !(this.keyMap[NativeString(item.MapKey.String())] is null)
+	}
+
+	/**
+	 * Stream returns a stream of all the items in the set.
+	 */
+	function<T*> Stream() {
+		return this.keys.Stream()
+	}
+}
+
+/**
+ * Map defines a map from keys to values.
+ */
+@•typealias('map')
+class Map<T : mappable, Q> {
+	var<Object> internalObject = Object.new()
+	var<Set<T>> keys = Set<T>.Empty()
+
+	/**
+	 * Empty returns an empty map.
+	 */
+	constructor Empty() {
+		return Map<T, Q>.new()
+	}
+
+	/**
+	 * forArrays constructs and returns a Map from the given keys and values arrays.
+	 */
+	constructor forArrays(keys Array, values Array) {
+		var map = Map<T, Q>.new()
+		var len = int(keys.length)
+		for i in 0..(len - 1) {
+			var tKey = keys[Number(i)].(T)
+			map[tKey] = values[Number(i)].(Q)
+		}
+		return map
+	}
+
+	/**
+	 * Keys returns a stream of all the keys in the map.
+	 */
+	property<T*> Keys {
+		get {
+			return this.keys.Stream()
+		}
+	}
+
+	/**
+	 * RemoveKey removes the the specified key from the map (if present).
+	 */
+	function<void> RemoveKey(key T) {
+		var keyString = key.MapKey.String()
+		if this.keys.Remove(key) {
+		  this.internalObject[NativeString(keyString)] = null
+		}
+	}
+
+	operator<Q?> Index(key T) {
+		var keyString = key.MapKey.String()
+		var value = this.internalObject[NativeString(keyString)]
+		if value is null {
+			return null
+		}
+
+		return value.(Q)
+	}
+
+	operator SetIndex(key T, value Q) {
+		var keyString = key.MapKey.String()
+		if this.keys.Add(key) {
+			this.internalObject[NativeString(keyString)] = value
+		}
+	}
+}
