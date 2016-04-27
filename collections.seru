@@ -80,6 +80,16 @@ type Mapping<T> : Object {
 		}
 	}
 
+	/**
+	 * IsEmpty returns true if the mapping is empty.
+	 */
+	property<bool> IsEmpty {
+		get {
+			// TODO: make this more efficient.
+			return this.Keys.Length == 0
+		}
+	}
+
 	operator SetIndex(key string, value any) {
 		var o = Object(this)
 		o[NativeString(key)] = value
@@ -131,6 +141,25 @@ type Slice<T> : Array {
 	 */
 	constructor overArray(arr Array) {
 		return Slice<T>(arr)
+	}
+
+	operator<Slice<T>> Slice(startindex int?, endindex int?) {
+		var start = startindex ?? 0
+		var end = endindex ?? this.Length
+
+		if start < 0 {
+			start = start + this.Length
+		}
+
+		if end < 0 {
+			end = end + this.Length
+		}
+
+		if start >= end {
+			return Slice<T>.Empty()
+		}
+
+		return Slice<T>.overArray(Array(this).slice(Number(start), Number(end)))
 	}
 
 	operator<T> Index(index int) {
@@ -207,6 +236,16 @@ class List<T> {
 		for item in stream {
 			l.Add(item)
 		}
+		return l
+	}
+
+	/**
+	 * Concat returns a list whose contents are the concatenated contents of the given lists.
+	 */
+	constructor Concat(first List<T>, second List<T>) {
+		var l = List<T>.Empty()
+		l.internalArray = first.internalArray.slice(0).concat(second.internalArray)
+		l.indexArray = first.indexArray.slice(0).concat(second.indexArray)
 		return l
 	}
 

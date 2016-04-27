@@ -37,7 +37,7 @@ interface String {
   serializer;
 };
 
-[Constructor(any value)]
+[Constructor(any value), NativeOperator=Equals]
 interface Boolean {
   String toString();
 

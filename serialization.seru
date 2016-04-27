@@ -19,14 +19,14 @@ class JSON {
 	 * Stringify returns the JSON string form of the given mapping.
 	 */
 	function<string> Stringify(value mapping<any>) {
-		return string(NativeJSON.stringify(Object(value)))
+	    return string(NativeJSON.stringify(Object(value), Internal.autoUnbox))
 	}
 
 	/**
 	 * Parse parses the given JSON string into a Mapping. Will reject on a parse error.
 	 */
 	function<mapping<any>> Parse(value string) {
-		return mapping<any>(NativeJSON.parse(NativeString(value), Internal.autoNominalWrap))
+		return mapping<any>(NativeJSON.parse(NativeString(value), Internal.autoBox))
 	}
 }
 

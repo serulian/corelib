@@ -132,6 +132,10 @@ type Boolean : NativeBoolean {
 	function<string> String() {
 		return String(NativeBoolean(this).toString())
 	}
+
+	operator Equals(first bool, second bool) {
+		return Boolean(Boolean(first) == Boolean(second))
+	}
 }
 
 /**
@@ -188,6 +192,13 @@ type String : NativeString {
 	 */
 	function<string> Trim() {
 	   return String(NativeString(this).trim())
+	}
+
+	/**
+	 * ToLowerCase returns the string in lowercase.
+	 */
+	function<string> ToLowerCase() {
+		return String(NativeString(this).toLowerCase())
 	}
 
 	/**
