@@ -1,0 +1,30 @@
+from webidl`promise` import Promise as NativePromise
+from webidl`core` import Function1
+
+/**
+ * Promise wraps a native ES6 promise with well-defined methods.
+ */
+@•typealias('promise')
+type Promise<T> : NativePromise {
+	constructor Execute(handler function<void>(function<void>(T), function<void>(error))) {
+		var native = NativePromise.new(function<void>(resolveNow Function1, rejectNow Function1) {
+			handler(function<void>(value T) {
+				resolveNow.call(null, value)
+			}, function<void>(err error) {
+				rejectNow.call(null, err)
+			})
+		})
+
+		return Promise<T>(native)
+	}
+
+	function<awaitable<T>> Then(callback function<void>(T)) {
+		NativePromise(this).then(callback)
+		return this
+	}
+
+	function<awaitable<T>> Catch(callback function<void>(error)) {
+		NativePromise(this).catch(callback)
+		return this
+	}
+}

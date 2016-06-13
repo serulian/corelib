@@ -432,6 +432,13 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
+	 * Mapping returns the underlying Mapping of this Map's values.
+	 */
+	function<Mapping<string>> Mapping() {
+		return Mapping<string>(this.internalObject)
+	}
+
+	/**
 	 * Keys returns a stream of all the keys in the map.
 	 */
 	property<T*> Keys {

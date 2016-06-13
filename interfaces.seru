@@ -46,21 +46,21 @@ interface Mappable {
 }
 
 /**
- * Promise defines an interface for awaiting the result of an async operation.
+ * Awaitable defines an interface for awaiting the result of an async operation.
  */
-@•typealias('promise')
-interface Promise<T> {
+@•typealias('awaitable')
+interface Awaitable<T> {
 	/**
 	 * Then registers a callback to invoked with the async result once the operation
 	 * completes successfully.
 	 */
-	function<Promise<T>> Then(callback function<void>(T))
+	function<Awaitable<T>> Then(callback function<void>(T))
 
 	/**
 	 * Catch registers a callback to invoked with the error if the operation
 	 * fails to complete successfully.
 	 */
-	function<Promise<T>> Catch(callback function<void>(error))
+	function<Awaitable<T>> Catch(callback function<void>(error))
 }
 
 /**

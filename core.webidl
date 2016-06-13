@@ -108,7 +108,19 @@ interface RegExp {
 };
 
 [Constructor]
-interface Function {};
+interface Function {
+  void call(any thisArg);
+};
+
+[Constructor]
+interface Function1 {
+  void call(any thisArg, any arg1);
+};
+
+[Constructor]
+interface Function2 {
+  void call(any thisArg, any arg1, any arg2);
+};
 
 [NoInterfaceObject]
 interface JSON {
