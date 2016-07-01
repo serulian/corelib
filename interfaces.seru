@@ -12,6 +12,15 @@ interface Stringable {
 }
 
 /**
+ * MapStream runs a mapper function over a stream, returning a stream of the mapped values.
+ */
+function<Q*> MapStream<T, Q>(stream T*, mapper function<Q>(T)) {
+	for item in stream {
+		yield mapper(item)
+	}
+}
+
+/**
  * Stream defines a stream of values of a type.
  */
 @•typealias('stream')
