@@ -1,3 +1,4 @@
+@•typealias('tuple')
 class Tuple<T, Q> {
 	var<T?> First = null
 	var<Q?> Second = null
