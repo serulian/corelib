@@ -108,6 +108,10 @@ type Float64 : Number {
 		return Boolean(Number(left) == Number(right))
 	}
 
+	operator Compare(left float64, right float64) {
+		return (left - right).Floor()
+	}
+
 	/**
 	 * Floor returns the current float rounded down to the nearest integer.
 	 */
