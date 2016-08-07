@@ -218,6 +218,13 @@ type String : NativeString {
 		return slice<string>.ForArray(arr)
 	}
 
+	/**
+	 * HasPrefix returns true if the string starts with the given prefix.
+	 */
+	function<bool> HasPrefix(prefix string) {
+		return int(NativeString(this).indexOf(&prefix)) == 0
+	}
+
 	function<string> String() {
 		return this
 	}
