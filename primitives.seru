@@ -145,6 +145,10 @@ type Boolean : NativeBoolean {
 	operator Equals(first bool, second bool) {
 		return Boolean(NativeBoolean(first) == NativeBoolean(second))
 	}
+
+	operator Bool(value bool) {
+		return value
+	}
 }
 
 /**
@@ -196,6 +200,10 @@ type String : NativeString {
 		return String(NativeString(this).substring(Number(start), Number(end)))
 	}
 
+	operator Bool(value string) {
+		return !value.IsEmpty
+	}
+
 	/**
 	 * Trim removes all whitespace from the left and right sides of the string.
 	 */
@@ -231,6 +239,13 @@ type String : NativeString {
 
 	property<stringable> MapKey {
 		get { return this }
+	}
+
+	/**
+	 * IsEmpty returns whether the string is empty.
+	 */
+	property<bool> IsEmpty {
+		get { return this.Length == 0 }
 	}
 
 	/**

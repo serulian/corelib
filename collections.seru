@@ -90,6 +90,10 @@ type Mapping<T> : Object {
 		}
 	}
 
+	operator Bool(value Mapping<T>) {
+		return !value.IsEmpty
+	}
+
 	operator SetIndex(key string, value any) {
 		var o = Object(this)
 		o[NativeString(key)] = value
@@ -190,6 +194,19 @@ type Slice<T> : Array {
 			return int(Array(this).length)
 		}
 	}
+
+	/**
+	 * IsEmpty returns true if the slice is empty.
+	 */
+	property<bool> IsEmpty {
+		get {
+			return this.Length == 0
+		}
+	}
+
+	operator Bool(value Slice<T>) {
+		return !value.IsEmpty
+	}
 }
 
 /**
@@ -247,6 +264,10 @@ class List<T> {
 		l.internalArray = first.internalArray.slice(0).concat(second.internalArray)
 		l.indexArray = first.indexArray.slice(0).concat(second.indexArray)
 		return l
+	}
+
+	operator Bool(value List<T>) {
+		return !value.IsEmpty
 	}
 
 	operator<Slice<T>> Slice(startindex int?, endindex int?) {
@@ -343,6 +364,15 @@ class List<T> {
 			return Integer(this.internalArray.length)
 		}
 	}
+
+	/**
+	 * IsEmpty returns true if the list is empty.
+	 */
+	property<bool> IsEmpty {
+		get {
+			return this.Count == 0
+		}
+	}
 }
 
 /**
@@ -400,6 +430,19 @@ class Set<T : mappable> {
 	 */
 	function<T*> Stream() {
 		return this.keys.Stream()
+	}
+
+	/**
+	 * IsEmpty returns true if the set is empty.
+	 */
+	property<bool> IsEmpty {
+		get {
+			return this.keys.IsEmpty
+		}
+	}
+
+	operator Bool(value Set<T>) {
+		return !value.IsEmpty
 	}
 }
 
@@ -472,5 +515,18 @@ class Map<T : mappable, Q> {
 		if this.keys.Add(key) {
 			this.internalObject[NativeString(keyString)] = value
 		}
+	}
+
+	/**
+	 * IsEmpty returns true if the Map is empty.
+	 */
+	property<bool> IsEmpty {
+		get {
+			return this.keys.IsEmpty
+		}
+	}
+
+	operator Bool(value Map<T, Q>) {
+		return !value.IsEmpty
 	}
 }
