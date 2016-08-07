@@ -434,8 +434,8 @@ class Map<T : mappable, Q> {
 	/**
 	 * Mapping returns the underlying Mapping of this Map's values.
 	 */
-	function<Mapping<string>> Mapping() {
-		return Mapping<string>(this.internalObject)
+	function<Mapping<Q>> Mapping() {
+		return Mapping<Q>(this.internalObject)
 	}
 
 	/**
