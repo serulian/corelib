@@ -90,6 +90,18 @@ type Mapping<T> : Object {
 		}
 	}
 
+	/**
+	 * WithEntry returns a copy of the Mapping, with the given key and value set.
+	 */
+	function<Mapping<T>> WithEntry(key string, value T) {
+		copy := Object.new()
+		for existingKey in this.Keys {
+			copy[&existingKey] = this[existingKey]
+		}
+		copy[&key] = value
+		return Mapping<T>(copy)
+	}
+
 	operator Bool(value Mapping<T>) {
 		return !value.IsEmpty
 	}
