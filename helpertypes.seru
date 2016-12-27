@@ -14,6 +14,7 @@ class Tuple<T, Q> {
 /**
  * IntStream represents a stream of integers.
  */
+@•typealias('$intstream')
 class IntStream {
 	var<int> start
 	var<int> end
