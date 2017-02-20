@@ -283,7 +283,7 @@ class List<T> {
 	}
 
 	operator Contains(value T) {
-		return this.IndexOf(value) >= 0
+		return (this.IndexOf(value) ?? -1) >= 0
 	}
 
 	operator<Slice<T>> Slice(startindex int?, endindex int?) {
