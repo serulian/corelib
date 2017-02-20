@@ -282,6 +282,10 @@ class List<T> {
 		return !value.IsEmpty
 	}
 
+	operator Contains(value T) {
+		return this.IndexOf(value) >= 0
+	}
+
 	operator<Slice<T>> Slice(startindex int?, endindex int?) {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Count
@@ -456,6 +460,10 @@ class Set<T : mappable> {
 	operator Bool(value Set<T>) {
 		return !value.IsEmpty
 	}
+
+	operator Contains(value T) {
+		return this.Contains(value)
+	}
 }
 
 /**
@@ -512,6 +520,13 @@ class Map<T : mappable, Q> {
 		}
 	}
 
+	/**
+	 * HasKey returns true if the map contains the specified key.
+	 */
+	function<bool> HasKey(key T) {
+		return this.keys.Contains(key)
+	}
+
 	operator<Q?> Index(key T) {
 		var keyString = key.MapKey.String()
 		var value = this.internalObject[NativeString(keyString)]
@@ -536,6 +551,10 @@ class Map<T : mappable, Q> {
 		get {
 			return this.keys.IsEmpty
 		}
+	}
+
+	operator Contains(key T) {
+		return this.HasKey(key)
 	}
 
 	operator Bool(value Map<T, Q>) {
