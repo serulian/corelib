@@ -6,6 +6,7 @@ interface Object {
   getter any (String propertyName);
   setter void (String propertyName, any value);
   Boolean hasOwnProperty(String propertyName);
+  String toString();
 
   static void defineProperty(Object o, String propertyName, Object descriptor);
   static Array keys(Object o);
