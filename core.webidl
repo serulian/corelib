@@ -136,3 +136,13 @@ interface Math {
   static Number ceil(Number value);
   static Number round(Number value);
 };
+
+[Constructor(optional String message, optional String fileName, optional Number lineNumber)]
+interface Error {
+  readonly attribute String message;
+  readonly attribute String fileName;
+  readonly attribute String name;
+  readonly attribute Number lineNumber;
+  readonly attribute Number columnNumber;
+  readonly attribute String stack;
+};

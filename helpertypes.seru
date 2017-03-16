@@ -39,6 +39,9 @@ class IntStream {
 	}
 }
 
+/**
+ * SimpleError defines an error that merely wraps a string message.
+ */
 type SimpleError : string {
 	constructor WithMessage(message string) {
 		return SimpleError(message)
@@ -50,3 +53,20 @@ type SimpleError : string {
 		}
 	}
 }
+
+/**
+ * WrappedError wraps a native error into matching the Error interface.
+ */
+@•typealias('wrappederror')
+type WrappedError : NativeError {
+	constructor For(err NativeError) {
+		return WrappedError(err)
+	}
+
+	property<string> Message {
+		get {
+			return string(NativeError(this).message)
+		}
+	}
+}
+
