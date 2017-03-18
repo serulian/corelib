@@ -1,3 +1,5 @@
+from webidl`core` import Error as NativeError
+
 @•typealias('tuple')
 class Tuple<T, Q> {
 	var<T?> First = null
