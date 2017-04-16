@@ -1,0 +1,14 @@
+from webidl`core` import Object
+from webidl`core` import JSON as NativeJSON
+
+/**
+ * ESObjectLiteral returns an ECMAScript Object Literal from the given Mapping. Designed to
+ * be used to pass ES-native mappings to WebIDL imported APIs.
+ */
+function<Object> ESObjectLiteral(mapping mapping<any>) {
+    // Note: This will convert the mapping to JSON (auto-unboxing along the way) and
+    // then back from JSON, thereby unboxing any internally boxed types. This is not
+    // the most efficient approach and should probably be optimized in the future if we find
+    // it problematic.
+	return NativeJSON.parse(&(json.Get().Stringify(mapping)))
+}
