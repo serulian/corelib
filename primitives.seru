@@ -236,6 +236,14 @@ type String : NativeString {
 	function<bool> HasPrefix(prefix string) {
 		return int(NativeString(this).indexOf(&prefix)) == 0
 	}
+	
+	/**
+	 * Contains returns true if this string contains the other string.
+	 */
+	function<bool> Contains(otherString string) {
+	   index := int(NativeString(this).indexOf(&otherString))
+	   return index >= 0
+	}
 
 	function<string> String() {
 		return this
