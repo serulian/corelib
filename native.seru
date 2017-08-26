@@ -2,7 +2,7 @@ from webidl`core` import Object
 from webidl`core` import JSON as NativeJSON
 
 /**
- * ESObjectLiteral returns an ECMAScript Object Literal from the given Mapping. Designed to
+ * ESObjectLiteral returns an ECMAScript Object Literal from the given `mapping`. Designed to
  * be used to pass ES-native mappings to WebIDL imported APIs.
  */
 function<Object> ESObjectLiteral(mapping mapping<any>) {

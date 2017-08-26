@@ -24,6 +24,13 @@ type Integer : Number {
 		return IntStream.OverRange(start, end)
 	}
 
+	/**
+	 * ExclusiveRange returns an exclusive range of integers.
+	 */
+	operator ExclusiveRange(start int, end int) {
+		return IntStream.OverRange(start, end - 1)
+	}
+
 	operator Plus(left int, right int) {
 		return Integer(Number(left) + Number(right))
 	}
@@ -156,7 +163,7 @@ type Boolean : NativeBoolean {
 }
 
 /**
- * formatTemplateString formats the given pieces and values into a string value.
+ * formatTemplateString formats the given `pieces` and `values` into a string value.
  */
 function<string> formatTemplateString(pieces []string, values []stringable) {
 	var overallPieces = Array.new()
@@ -223,7 +230,15 @@ type String : NativeString {
 	}
 
 	/**
-	 * Split splits the string into a slice of strings based on a delimeter.
+	 * ToUpperCase returns the string in uppercase.
+	 */
+	function<string> ToUpperCase() {
+		return String(NativeString(this).toUpperCase())
+	}
+
+	/**
+	 * Split splits the string into a slice of strings based on a `separator`. If `limit` is specified,
+	 * then the string will be split into a maximum of `limit` pieces.
 	 */
 	function<[]string> Split(separator string, limit int?) {
 		var arr = NativeString(this).split(NativeString(separator), Number(limit ?? -1))
@@ -231,18 +246,30 @@ type String : NativeString {
 	}
 
 	/**
-	 * HasPrefix returns true if the string starts with the given prefix.
+	 * HasPrefix returns true if the string starts with the given `prefix`.
 	 */
 	function<bool> HasPrefix(prefix string) {
-		return int(NativeString(this).indexOf(&prefix)) == 0
+		return this[0:prefix.Length] == prefix
 	}
-	
+
 	/**
-	 * Contains returns true if this string contains the other string.
+	 * HasSuffix returns true if the string ends with the given `suffix`.
+	 */
+	function<bool> HasSuffix(suffix string) {
+		return this[this.Length - suffix.Length:this.Length] == suffix
+	}
+
+	/**
+	 * Contains returns true if this string contains the `otherString`. Note that this check
+	 * is *case-sensitive*.
 	 */
 	function<bool> Contains(otherString string) {
 	   index := int(NativeString(this).indexOf(&otherString))
 	   return index >= 0
+	}
+
+	operator Contains(other string) {
+		return this.Contains(other)
 	}
 
 	function<string> String() {

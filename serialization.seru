@@ -16,14 +16,14 @@ class JSON {
 	}
 
 	/**
-	 * Stringify returns the JSON string form of the given mapping.
+	 * Stringify returns the JSON string form of the given `mapping`.
 	 */
 	function<string> Stringify(value mapping<any>) {
 	    return string(NativeJSON.stringify(Object(value), Internal.autoUnbox))
 	}
 
 	/**
-	 * Parse parses the given JSON string into a Mapping. Will reject on a parse error.
+	 * Parse parses the given JSON `value` into a Mapping. Will reject on a parse error.
 	 */
 	function<mapping<any>> Parse(value string) {
 		return mapping<any>(NativeJSON.parse(NativeString(value), Internal.autoBox))
@@ -40,7 +40,7 @@ interface Stringifier {
 	}
 
 	/**
-	 * Stringify converts a Mapping into a string form.
+	 * Stringify converts a Mapping `value` into a string form.
 	 */
 	function<string> Stringify(value mapping<any>)
 }
@@ -55,7 +55,7 @@ interface Parser {
 	}
 
 	/**
-	 * Parse parses the given string into a Mapping. Should reject on failure.
+	 * Parse parses the given string `value` into a Mapping. Should reject on failure.
 	 */
 	function<mapping<any>> Parse(value string)
 }

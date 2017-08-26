@@ -13,7 +13,10 @@ class listStream<I> {
 	var<List<I>> list
 	var<int> index = 0
 
-	constructor For(list List<I>) {
+	/**
+	 * forList creates a new listStream over the items in the given `list`.
+	 */
+	constructor forList(list List<I>) {
 		return listStream<I>{
 			list: list,
 		}
@@ -36,7 +39,10 @@ class sliceStream<I> {
 	var<Slice<I>> slice
 	var<int> index = 0
 
-	constructor For(slice Slice<I>) {
+	/**
+	 * forStream returns a new sliceStream over the items in the given `slice`.
+	 */
+	constructor forStream(slice Slice<I>) {
 		return sliceStream<I>{
 			slice: slice,
 		}
@@ -65,7 +71,7 @@ type Mapping<T> : Object {
 	}
 
 	/**
-	 * overObject returns a Mapping over the native object.
+	 * overObject returns a Mapping over the native object `obj`.
 	 */
 	constructor overObject(obj Object) {
 		return Mapping<T>(obj)
@@ -85,34 +91,37 @@ type Mapping<T> : Object {
 	 */
 	property<bool> IsEmpty {
 		get {
-			// TODO: make this more efficient.
 			return this.Keys.Length == 0
 		}
 	}
 
 	/**
-	 * WithEntry returns a copy of the Mapping, with the given key and value set.
+	 * Clone makes a copy of the Mapping.
 	 */
-	function<Mapping<T>> WithEntry(key string, value T) {
+	function<Mapping<T>> Clone() {
 		copy := Object.new()
 		for existingKey in this.Keys {
 			copy[&existingKey] = this[existingKey]
 		}
-		copy[&key] = value
 		return Mapping<T>(copy)
+	}
+
+	/**
+	 * WithEntry returns a copy of the Mapping, with the given `key` set to the given `value`.
+	 */
+	function<Mapping<T>> WithEntry(key string, value T) {
+		copy := this.Clone()
+		var o = Object(copy)
+		o[&key] = value
+		return copy
 	}
 
 	operator Bool(value Mapping<T>) {
 		return !value.IsEmpty
 	}
 
-	operator SetIndex(key string, value any) {
-		var o = Object(this)
-		o[NativeString(key)] = value
-	}
-
 	operator<T?> Index(key string) {
-		var value = Object(this)[NativeString(key)]
+		var value = Object(this)[&key]
 		if value is null {
 			return null
 		}
@@ -135,7 +144,7 @@ type Slice<T> : Array {
 	}
 
 	/**
-	 * From returns a slice representing the items in the stream.
+	 * From returns a slice representing the `items` in the stream.
 	 */
 	constructor From(items T*) {
 		var s = Slice<T>.Empty()
@@ -146,14 +155,14 @@ type Slice<T> : Array {
 	}
 
 	/**
-	 * ForArray returns a slice over the specified array.
+	 * ForArray returns a slice over the specified `arr`.
 	 */
 	constructor ForArray(arr Array) {
 		return Slice<T>.overArray(arr)
 	}
 
 	/**
-	 * overArray returns a slice over the specified array.
+	 * overArray returns a slice over the specified `arr`.
 	 */
 	constructor overArray(arr Array) {
 		return Slice<T>(arr)
@@ -195,7 +204,7 @@ type Slice<T> : Array {
 	 * Stream returns a stream of all the items in the slice.
 	 */
 	function<T*> Stream() {
-		return sliceStream<T>.For(this)
+		return sliceStream<T>.forStream(this)
 	}
 
 	/**
@@ -216,6 +225,22 @@ type Slice<T> : Array {
 		}
 	}
 
+	/**
+	 * IndexOf returns the index of the `element` in this slice or null if none.
+	 */
+	function<int?> IndexOf(element T) {
+		var foundIndex = int(Array(this).indexOf(element, &0))
+		if foundIndex < 0 {
+			return null
+		}
+
+		return foundIndex
+	}
+
+	operator Contains(value T) {
+		return (this.IndexOf(value) ?? -1) >= 0
+	}
+
 	operator Bool(value Slice<T>) {
 		return !value.IsEmpty
 	}
@@ -230,7 +255,7 @@ class List<T> {
 	var<Array> indexArray = Array.new()
 
 	/**
-	 * forArray creates a List for the given array.
+	 * forArray creates a List for the given `arr`.
 	 */
 	constructor forArray(arr Array) {
 		var l = List<T>.Empty()
@@ -248,7 +273,7 @@ class List<T> {
 	}
 
 	/**
-	 * CopyOf returns a List which is a copy of the given list.
+	 * CopyOf returns a List which is a copy of the `other` list.
 	 */
 	constructor CopyOf(other List<T>) {
 		var l = List<T>.Empty()
@@ -258,7 +283,7 @@ class List<T> {
 	}
 
 	/**
-	 * Of returns a List populated by the contents of the stream.
+	 * Of returns a List populated by the contents of the `stream`.
 	 */
 	constructor Of(stream T*) {
 		var l = List<T>.Empty()
@@ -269,7 +294,8 @@ class List<T> {
 	}
 
 	/**
-	 * Concat returns a list whose contents are the concatenated contents of the given lists.
+	 * Concat returns a list whose contents are the concatenated contents of the `first` list and
+	 * the `second` list.
 	 */
 	constructor Concat(first List<T>, second List<T>) {
 		var l = List<T>.Empty()
@@ -335,11 +361,11 @@ class List<T> {
 	 * Stream returns a stream of all the items in the list.
 	 */
 	function<stream<T>> Stream() {
-		return listStream<T>.For(this)
+		return listStream<T>.forList(this)
 	}
 
 	/**
-	 * Add adds the given element to the list.
+	 * Add adds the given `element` to the list.
 	 */
 	function<void> Add(element T) {
 		this.internalArray.push(element)
@@ -347,7 +373,7 @@ class List<T> {
 	}
 
 	/**
-	 * Remove removes the given element from the list, if it is present. Note that this
+	 * Remove removes the given `element` from the list, if it is present. Note that this
 	 * will only remove the first instance found (if any).
 	 */
 	function<void> Remove(element T) {
@@ -360,7 +386,7 @@ class List<T> {
 	}
 
 	/**
-	 * IndexOf returns the index of the element in this list or null if none.
+	 * IndexOf returns the index of the `element` in this list or null if none.
 	 */
 	function<int?> IndexOf(element T, startIndex int?) {
 		var finalIndex = startIndex ?? 0
@@ -407,7 +433,7 @@ class Set<T : mappable> {
 	}
 
 	/**
-	 * Add adds the given item to the set (if not already present). Returns true if the item
+	 * Add adds the given `item` to the set (if not already present). Returns true if the `item`
 	 * was added.
 	 */
 	function<bool> Add(item T) {
@@ -421,7 +447,7 @@ class Set<T : mappable> {
 	}
 
 	/**
-	 * Remove removes the given item from the set (if present). Returns true if the item
+	 * Remove removes the given `item` from the set (if present). Returns true if the `item`
 	 * was removed.
 	 */
 	function<bool> Remove(item T) {
@@ -435,7 +461,7 @@ class Set<T : mappable> {
 	}
 
 	/**
-	 * Contains returns true if the set contains the specified item.
+	 * Contains returns true if the set contains the specified `item`.
 	 */
 	function<bool> Contains(item T) {
 		return !(this.keyMap[NativeString(item.MapKey.String())] is null)
@@ -482,7 +508,7 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
-	 * forArrays constructs and returns a Map from the given keys and values arrays.
+	 * forArrays constructs and returns a Map from the given `keys` and `values` arrays.
 	 */
 	constructor forArrays(keys Array, values Array) {
 		var map = Map<T, Q>.new()
@@ -495,10 +521,10 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
-	 * Mapping returns the underlying Mapping of this Map's values.
+	 * Mapping returns the a Mapping of this Map's values.
 	 */
 	function<Mapping<Q>> Mapping() {
-		return Mapping<Q>(this.internalObject)
+		return Mapping<Q>(this.internalObject).Clone()
 	}
 
 	/**
@@ -511,7 +537,7 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
-	 * RemoveKey removes the the specified key from the map (if present).
+	 * RemoveKey removes the the specified `key` from the map (if present).
 	 */
 	function<void> RemoveKey(key T) {
 		var keyString = key.MapKey.String()
@@ -521,7 +547,7 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
-	 * HasKey returns true if the map contains the specified key.
+	 * HasKey returns true if the map contains the specified `key`.
 	 */
 	function<bool> HasKey(key T) {
 		return this.keys.Contains(key)
