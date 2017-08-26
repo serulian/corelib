@@ -12,7 +12,8 @@ interface Stringable {
 }
 
 /**
- * MapStream runs a mapper function over a stream, returning a stream of the mapped values.
+ * MapStream runs a mapping function over a `stream`, returning a stream of the values transformed
+ * by the `mapper` function.
  */
 function<Q*> MapStream<T, Q>(stream T*, mapper function<Q>(T)) {
 	for item in stream {
@@ -60,13 +61,13 @@ interface Mappable {
 @•typealias('awaitable')
 interface Awaitable<T> {
 	/**
-	 * Then registers a callback to invoked with the async result once the operation
+	 * Then registers a `callback` to invoked with the async result once the operation
 	 * completes successfully.
 	 */
 	function<Awaitable<T>> Then(callback function<void>(T))
 
 	/**
-	 * Catch registers a callback to invoked with the error if the operation
+	 * Catch registers a `callback` to invoked with the error if the operation
 	 * fails to complete successfully.
 	 */
 	function<Awaitable<T>> Catch(callback function<void>(error))

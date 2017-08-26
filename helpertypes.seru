@@ -1,10 +1,23 @@
 from webidl`core` import Error as NativeError
 
+/**
+ * Tuple represents a simple tuple of two values.
+ */
 @•typealias('tuple')
 class Tuple<T, Q> {
+	/**
+	 * First is the first value in the tuple.
+	 */
 	var<T?> First = null
+
+	/**
+	 * Second is the second value in the tuple.
+	 */
 	var<Q?> Second = null
 
+	/**
+	 * Build constructs a tuple of the `first` and `second` values.
+	 */
 	constructor Build(first T?, second Q?) {
 		var tuple = Tuple<T, Q>.new()
 		tuple.First = first
@@ -22,11 +35,14 @@ class IntStream {
 	var<int> end
 	var<int> current
 
+	/**
+	 * OverRange returns a stream over the range of integers found between `start` and `end`, **inclusive**.
+	 */
 	constructor OverRange(start int, end int) {
 		return IntStream{
 			start: start,
 			end: end,
-			current: 0,
+			current: start,
 		}
 	}
 
