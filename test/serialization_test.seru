@@ -1,0 +1,43 @@
+from @core import List
+
+from webidl`jasmine` import describe, expect, it
+
+function<void> TEST() {
+	describe('JSON', function() {
+		describe('.Stringify()', function() {
+			expectSerialization := function(input mapping<any>, expected string) {
+				jsonString := json.Get().Stringify(input)
+				expect(&jsonString).toBe(&expected)
+			}
+
+			it('should convert objects to JSON', function(done function<void>()) {
+				expectSerialization({}, '{}')
+				expectSerialization([]{any}{'foo': 'bar'}, '{"foo":"bar"}')
+				expectSerialization([]{any}{'foo': 'bar', 'num': 42}, '{"foo":"bar","num":42}')
+				done()
+			})
+		})
+
+		describe('.Parse()', function() {
+			expectParsing := function(jsonString string, expected mapping<any>) {
+				parsed := json.Get().Parse(jsonString)
+
+				parsedKeys := List<string>.Of(parsed.Keys)
+				expectedKeys := List<string>.Of(expected.Keys)
+
+				expect(&parsedKeys.Count).toBe(&expectedKeys.Count)
+
+				for index in 0 ..< expectedKeys.Count {
+					expect(&parsedKeys[index]).toBe(&expectedKeys[index])
+				}
+			}
+
+			it('should convert objects from JSON', function(done function<void>()) {
+				expectParsing('{}', {})
+				expectParsing('{"foo": "bar"}', []{any}{'foo': 'bar'})
+				expectParsing('{"foo": 42}', []{any}{'foo': 42})
+				done()
+			})
+		})
+	})
+}

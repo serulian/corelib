@@ -1,454 +1,454 @@
 from webidl`jasmine` import describe, expect, it
 
 function<void> expectToBe(value any, otherValue any) {
-    expect(&value).toBe(&otherValue)
+	expect(&value).toBe(&otherValue)
 }
 
 function<void> TEST() {
-    // Boolean
-    describe('Boolean', function() {
-        describe('.String()', function() {
-            it('should convert bools to strings', function(done function<void>()) {
-                expectToBe(true.String(), 'true')
-                expectToBe(false.String(), 'false')
-                done()
-            })
-        })
+	// Boolean
+	describe('Boolean', function() {
+		describe('.String()', function() {
+			it('should convert bools to strings', function(done function<void>()) {
+				expectToBe(true.String(), 'true')
+				expectToBe(false.String(), 'false')
+				done()
+			})
+		})
 
-        describe('==', function() {
-            it('should compare booleans', function(done function<void>()) {
-                expectToBe(true == true, true)
-                expectToBe(true == false, false)
-                expectToBe(false == true, false)
-                expectToBe(false == false, true)
+		describe('==', function() {
+			it('should compare booleans', function(done function<void>()) {
+				expectToBe(true == true, true)
+				expectToBe(true == false, false)
+				expectToBe(false == true, false)
+				expectToBe(false == false, true)
 
-                expectToBe(true != true, false)
-                expectToBe(true != false, true)
-                expectToBe(false != true, true)
-                expectToBe(false != false, false)
-                done()
-            })
-        })
+				expectToBe(true != true, false)
+				expectToBe(true != false, true)
+				expectToBe(false != true, true)
+				expectToBe(false != false, false)
+				done()
+			})
+		})
 
-        describe('bool', function() {
-            it('should allow booleans to be used in conditionals', function(done function<void>()) {
-                expectToBe(true if true else false, true)
-                expectToBe(true if false else false, false)
-                done()
-            })
-        })
-    })
+		describe('bool', function() {
+			it('should allow booleans to be used in conditionals', function(done function<void>()) {
+				expectToBe(true if true else false, true)
+				expectToBe(true if false else false, false)
+				done()
+			})
+		})
+	})
 
-    // Float
-    describe('Float', function() {
-        describe('.String()', function() {
-            it('should convert floats to strings', function(done function<void>()) {
-                expectToBe(0f.String(), '0')
-                expectToBe(1f.String(), '1')
-                expectToBe((-1f).String(), '-1')
-                expectToBe(42f.String(), '42')
-                expectToBe((42.2).String(), '42.2')
-                expectToBe((-1.0f).String(), '-1')
-                done()
-            })
-        })
+	// Float
+	describe('Float', function() {
+		describe('.String()', function() {
+			it('should convert floats to strings', function(done function<void>()) {
+				expectToBe(0f.String(), '0')
+				expectToBe(1f.String(), '1')
+				expectToBe(-1f.String(), '-1')
+				expectToBe(42f.String(), '42')
+				expectToBe(42.2.String(), '42.2')
+				expectToBe(-1.0f.String(), '-1')
+				done()
+			})
+		})
 
-        describe('.Floor()', function() {
-            it('should convert floats to neared ceiling integers', function(done function<void>()) {
-                expectToBe(0f.Floor(), 0)
-                expectToBe(1f.Floor(), 1)
-                expectToBe(-1f.Floor(), -1)
+		describe('.Floor()', function() {
+			it('should convert floats to neared ceiling integers', function(done function<void>()) {
+				expectToBe(0f.Floor(), 0)
+				expectToBe(1f.Floor(), 1)
+				expectToBe(-1f.Floor(), -1)
 
-                expectToBe(0.5.Floor(), 0)
-                expectToBe(1.5.Floor(), 1)
-                expectToBe(2.99.Floor(), 2)
-                done()
-            })
-        })
+				expectToBe(0.5.Floor(), 0)
+				expectToBe(1.5.Floor(), 1)
+				expectToBe(2.99.Floor(), 2)
+				done()
+			})
+		})
 
-        describe('.Ceil()', function() {
-            it('should convert floats to nearest floored integers', function(done function<void>()) {
-                expectToBe(0f.Ceil(), 0)
-                expectToBe(1f.Ceil(), 1)
-                expectToBe(-1f.Ceil(), -1)
+		describe('.Ceil()', function() {
+			it('should convert floats to nearest floored integers', function(done function<void>()) {
+				expectToBe(0f.Ceil(), 0)
+				expectToBe(1f.Ceil(), 1)
+				expectToBe(-1f.Ceil(), -1)
 
-                expectToBe(0.4.Ceil(), 1)
-                expectToBe(1.5.Ceil(), 2)
-                expectToBe(2.99.Ceil(), 3)
-                done()
-            })
-        })
+				expectToBe(0.4.Ceil(), 1)
+				expectToBe(1.5.Ceil(), 2)
+				expectToBe(2.99.Ceil(), 3)
+				done()
+			})
+		})
 
-        describe('.Round()', function() {
-            it('should convert floats to nearest rounded integers', function(done function<void>()) {
-                expectToBe(0f.Round(), 0)
-                expectToBe(1f.Round(), 1)
-                expectToBe(-1f.Round(), -1)
+		describe('.Round()', function() {
+			it('should convert floats to nearest rounded integers', function(done function<void>()) {
+				expectToBe(0f.Round(), 0)
+				expectToBe(1f.Round(), 1)
+				expectToBe(-1f.Round(), -1)
 
-                expectToBe(0.4.Round(), 0)
-                expectToBe(1.5.Round(), 2)
-                expectToBe(2.99.Round(), 3)
-                done()
-            })
-        })
+				expectToBe(0.4.Round(), 0)
+				expectToBe(1.5.Round(), 2)
+				expectToBe(2.99.Round(), 3)
+				done()
+			})
+		})
 
-        describe('Operators', function() {
-            it('should work for addition', function(done function<void>()) {
-                expectToBe(0f + 0f, 0)
-                expectToBe(1f + 1f, 2)
-                expectToBe(1f + 2.1, 3.1)
-                expectToBe(40f + 2.2, 42.2)
-                expectToBe(2f + 40.2, 42.2)
-                done()
-            })
+		describe('Operators', function() {
+			it('should work for addition', function(done function<void>()) {
+				expectToBe(0f + 0f, 0)
+				expectToBe(1f + 1f, 2)
+				expectToBe(1f + 2.1, 3.1)
+				expectToBe(40f + 2.2, 42.2)
+				expectToBe(2f + 40.2, 42.2)
+				done()
+			})
 
-            it('should work for subtraction', function(done function<void>()) {
-                expectToBe(0f - 0f, 0f)
-                expectToBe(1f - 1f, 0f)
-                expectToBe(1f - 2f, -1f)
-                expectToBe(2f - 1.5, 0.5)
-                expectToBe(40f - 2.5f, 37.5)
-                done()
-            })
+			it('should work for subtraction', function(done function<void>()) {
+				expectToBe(0f - 0f, 0f)
+				expectToBe(1f - 1f, 0f)
+				expectToBe(1f - 2f, -1f)
+				expectToBe(2f - 1.5, 0.5)
+				expectToBe(40f - 2.5f, 37.5)
+				done()
+			})
 
-            it('should work for multiplication', function(done function<void>()) {
-                expectToBe(0f * 0f, 0f)
-                expectToBe(1f * 1f, 1f)
-                expectToBe(1f * 2f, 2f)
-                expectToBe(2f * 1.5, 3f)
-                done()
-            })
+			it('should work for multiplication', function(done function<void>()) {
+				expectToBe(0f * 0f, 0f)
+				expectToBe(1f * 1f, 1f)
+				expectToBe(1f * 2f, 2f)
+				expectToBe(2f * 1.5, 3f)
+				done()
+			})
 
-            it('should work for division', function(done function<void>()) {
-                expectToBe(1f / 1f, 1f)
-                expectToBe(1f / 2f, 0.5)
-                expectToBe(2f / 1f, 2f)
-                expectToBe(40f / 2f, 20f)
-                expectToBe(5f / 2f, 2.5)
-                done()
-            })
+			it('should work for division', function(done function<void>()) {
+				expectToBe(1f / 1f, 1f)
+				expectToBe(1f / 2f, 0.5)
+				expectToBe(2f / 1f, 2f)
+				expectToBe(40f / 2f, 20f)
+				expectToBe(5f / 2f, 2.5)
+				done()
+			})
 
-            it('should work for equality', function(done function<void>()) {
-                expectToBe(1f == 1f, true)
-                expectToBe(1f == 2f, false)
-                expectToBe(0f == 0f, true)
-                expectToBe(0.5 == 0.5, true)
+			it('should work for equality', function(done function<void>()) {
+				expectToBe(1f == 1f, true)
+				expectToBe(1f == 2f, false)
+				expectToBe(0f == 0f, true)
+				expectToBe(0.5 == 0.5, true)
 
-                expectToBe(1f != 1f, false)
-                expectToBe(1f != 2f, true)
-                expectToBe(0f != 0f, false)
-                done()
-            })
+				expectToBe(1f != 1f, false)
+				expectToBe(1f != 2f, true)
+				expectToBe(0f != 0f, false)
+				done()
+			})
 
-            it('should compare', function(done function<void>()) {
-                expectToBe(1f < 1f, false)
-                expectToBe(1f <= 1f, true)
+			it('should compare', function(done function<void>()) {
+				expectToBe(1f < 1f, false)
+				expectToBe(1f <= 1f, true)
 
-                expectToBe(1f > 1f, false)
-                expectToBe(1f >= 1f, true)
+				expectToBe(1f > 1f, false)
+				expectToBe(1f >= 1f, true)
 
-                expectToBe(10f > 1f, true)
-                expectToBe(10f >= 1f, true)
+				expectToBe(10f > 1f, true)
+				expectToBe(10f >= 1f, true)
 
-                expectToBe(10f < 1f, false)
-                expectToBe(10f <= 1f, false)
+				expectToBe(10f < 1f, false)
+				expectToBe(10f <= 1f, false)
 
-                expectToBe(4f < 42f, true)
-                expectToBe(4f <= 42f, true)
+				expectToBe(4f < 42f, true)
+				expectToBe(4f <= 42f, true)
 
-                expectToBe(4.2 < 42f, true)
-                expectToBe(4.2 <= 42f, true)
-                done()
-            })
-        })
-    })
+				expectToBe(4.2 < 42f, true)
+				expectToBe(4.2 <= 42f, true)
+				done()
+			})
+		})
+	})
 
-    // Integer
-   	describe('Integer', function() {
-        describe('.String()', function() {
-            it('should convert integers to strings', function(done function<void>()) {
-                expectToBe(0.String(), '0')
-                expectToBe(1.String(), '1')
-                expectToBe((-1).String(), '-1')
-                expectToBe(42.String(), '42')
-                done()
-            })
-        })
+	// Integer
+	describe('Integer', function() {
+		describe('.String()', function() {
+			it('should convert integers to strings', function(done function<void>()) {
+				expectToBe(0.String(), '0')
+				expectToBe(1.String(), '1')
+				expectToBe(-1.String(), '-1')
+				expectToBe(42.String(), '42')
+				done()
+			})
+		})
 
-        describe('Ranges', function() {
-            expectRange := function(numbers *int, expected slice<int>) {
-                l := list<int>.Of(numbers)
-                expectToBe(l.Count, expected.Length)
+		describe('Ranges', function() {
+			expectRange := function(numbers int*, expected slice<int>) {
+				l := list<int>.Of(numbers)
+				expectToBe(l.Count, expected.Length)
 
-                for index in 0..<expected.Length {
-                    expectToBe(l[index], expected[index])
-                }
-            }
+				for index in 0 ..< expected.Length {
+					expectToBe(l[index], expected[index])
+				}
+			}
 
-            it('should iterate all numbers inclusive', function(done function<void>()) {
-                expectRange(0..1, [0, 1])
-                expectRange(1..2, [1, 2])
-                expectRange(0..2, [0, 1, 2])
-                expectRange(1..3, [1, 2, 3])
-                expectRange(-2..2, [-2, -1, 0, 1, 2])
-                done()
-            })
+			it('should iterate all numbers inclusive', function(done function<void>()) {
+				expectRange(0 .. 1, [0, 1])
+				expectRange(1 .. 2, [1, 2])
+				expectRange(0 .. 2, [0, 1, 2])
+				expectRange(1 .. 3, [1, 2, 3])
+				expectRange(-2 .. 2, [-2, -1, 0, 1, 2])
+				done()
+			})
 
-            it('should iterate all numbers exclusive', function(done function<void>()) {
-                expectRange(0..<1, [0])
-                expectRange(1..<2, [1])
-                expectRange(0..<2, [0, 1])
-                expectRange(1..<3, [1, 2])
-                expectRange(-2..<2, [-2, -1, 0, 1])
-                done()
-            })
-        })
+			it('should iterate all numbers exclusive', function(done function<void>()) {
+				expectRange(0 ..< 1, [0])
+				expectRange(1 ..< 2, [1])
+				expectRange(0 ..< 2, [0, 1])
+				expectRange(1 ..< 3, [1, 2])
+				expectRange(-2 ..< 2, [-2, -1, 0, 1])
+				done()
+			})
+		})
 
-        describe('Operators', function() {
-            it('should work for addition', function(done function<void>()) {
-                expectToBe(0 + 0, 0)
-                expectToBe(1 + 1, 2)
-                expectToBe(1 + 2, 3)
-                expectToBe(40 + 2, 42)
-                expectToBe(2 + 40, 42)
-                done()
-            })
+		describe('Operators', function() {
+			it('should work for addition', function(done function<void>()) {
+				expectToBe(0 + 0, 0)
+				expectToBe(1 + 1, 2)
+				expectToBe(1 + 2, 3)
+				expectToBe(40 + 2, 42)
+				expectToBe(2 + 40, 42)
+				done()
+			})
 
-            it('should work for subtraction', function(done function<void>()) {
-                expectToBe(0 - 0, 0)
-                expectToBe(1 - 1, 0)
-                expectToBe(1 - 2, -1)
-                expectToBe(2 - 1, 1)
-                expectToBe(40 - 2, 38)
-                expectToBe(2 - 40, -38)
-                done()
-            })
+			it('should work for subtraction', function(done function<void>()) {
+				expectToBe(0 - 0, 0)
+				expectToBe(1 - 1, 0)
+				expectToBe(1 - 2, -1)
+				expectToBe(2 - 1, 1)
+				expectToBe(40 - 2, 38)
+				expectToBe(2 - 40, -38)
+				done()
+			})
 
-            it('should work for multiplication', function(done function<void>()) {
-                expectToBe(0 * 0, 0)
-                expectToBe(1 * 1, 1)
-                expectToBe(1 * 2, 2)
-                expectToBe(2 * 1, 2)
-                expectToBe(40 * 2, 80)
-                expectToBe(2 * 40, 80)
-                done()
-            })
+			it('should work for multiplication', function(done function<void>()) {
+				expectToBe(0 * 0, 0)
+				expectToBe(1 * 1, 1)
+				expectToBe(1 * 2, 2)
+				expectToBe(2 * 1, 2)
+				expectToBe(40 * 2, 80)
+				expectToBe(2 * 40, 80)
+				done()
+			})
 
-            it('should work for division', function(done function<void>()) {
-                expectToBe(1 / 1, 1)
-                expectToBe(1 / 2, 0)
-                expectToBe(2 / 1, 2)
-                expectToBe(40 / 2, 20)
-                expectToBe(40 / 3, 13)
-                done()
-            })
+			it('should work for division', function(done function<void>()) {
+				expectToBe(1 / 1, 1)
+				expectToBe(1 / 2, 0)
+				expectToBe(2 / 1, 2)
+				expectToBe(40 / 2, 20)
+				expectToBe(40 / 3, 13)
+				done()
+			})
 
-            it('should work for modulo', function(done function<void>()) {
-                expectToBe(1 % 1, 0)
-                expectToBe(1 % 2, 1)
-                expectToBe(2 % 1, 0)
-                expectToBe(40 % 2, 0)
-                expectToBe(40 % 3, 1)
-                expectToBe(40 % 37, 3)
-                done()
-            })
+			it('should work for modulo', function(done function<void>()) {
+				expectToBe(1 % 1, 0)
+				expectToBe(1 % 2, 1)
+				expectToBe(2 % 1, 0)
+				expectToBe(40 % 2, 0)
+				expectToBe(40 % 3, 1)
+				expectToBe(40 % 37, 3)
+				done()
+			})
 
-            it('should work for equality', function(done function<void>()) {
-                expectToBe(1 == 1, true)
-                expectToBe(1 == 2, false)
-                expectToBe(0 == 0, true)
+			it('should work for equality', function(done function<void>()) {
+				expectToBe(1 == 1, true)
+				expectToBe(1 == 2, false)
+				expectToBe(0 == 0, true)
 
-                expectToBe(1 != 1, false)
-                expectToBe(1 != 2, true)
-                expectToBe(0 != 0, false)
-                done()
-            })
+				expectToBe(1 != 1, false)
+				expectToBe(1 != 2, true)
+				expectToBe(0 != 0, false)
+				done()
+			})
 
-            it('should compare', function(done function<void>()) {
-                expectToBe(1 < 1, false)
-                expectToBe(1 <= 1, true)
+			it('should compare', function(done function<void>()) {
+				expectToBe(1 < 1, false)
+				expectToBe(1 <= 1, true)
 
-                expectToBe(1 > 1, false)
-                expectToBe(1 >= 1, true)
+				expectToBe(1 > 1, false)
+				expectToBe(1 >= 1, true)
 
-                expectToBe(10 > 1, true)
-                expectToBe(10 >= 1, true)
+				expectToBe(10 > 1, true)
+				expectToBe(10 >= 1, true)
 
-                expectToBe(10 < 1, false)
-                expectToBe(10 <= 1, false)
+				expectToBe(10 < 1, false)
+				expectToBe(10 <= 1, false)
 
-                expectToBe(4 < 42, true)
-                expectToBe(4 <= 42, true)
-                done()
-            })
-        })
-    })
+				expectToBe(4 < 42, true)
+				expectToBe(4 <= 42, true)
+				done()
+			})
+		})
+	})
 
-    // String
-    describe('String', function() {
-        describe('.String()', function() {
-            it('should return the same string', function(done function<void>()) {
-                expectToBe(''.String(), '')
-                expectToBe('hello world'.String(), 'hello world')
-                done()
-            })
-        })
+	// String
+	describe('String', function() {
+		describe('.String()', function() {
+			it('should return the same string', function(done function<void>()) {
+				expectToBe(''.String(), '')
+				expectToBe('hello world'.String(), 'hello world')
+				done()
+			})
+		})
 
-        describe('operator Equals', function() {
-            it('should properly compare strings', function(done function<void>()) {
-                expectToBe('' == '', true)
-                expectToBe('hello' == 'hello', true)
-                expectToBe('hellos' == 'hello', false)
-                expectToBe('Hello' == 'hello', false)
-                done()
-            })
-        })
+		describe('operator Equals', function() {
+			it('should properly compare strings', function(done function<void>()) {
+				expectToBe('' == '', true)
+				expectToBe('hello' == 'hello', true)
+				expectToBe('hellos' == 'hello', false)
+				expectToBe('Hello' == 'hello', false)
+				done()
+			})
+		})
 
-        describe('operator Plus', function() {
-            it('should properly concatenate strings', function(done function<void>()) {
-                expectToBe('' + '', '')
-                expectToBe('hello' + ' world', 'hello world')
-                expectToBe('a' + 'b' + 'c', 'abc')
-                done()
-            })
-        })
+		describe('operator Plus', function() {
+			it('should properly concatenate strings', function(done function<void>()) {
+				expectToBe('' + '', '')
+				expectToBe('hello' + ' world', 'hello world')
+				expectToBe('a' + 'b' + 'c', 'abc')
+				done()
+			})
+		})
 
-        describe('operator Bool', function() {
-            it('should return truthy for non-empty strings', function(done function<void>()) {
-                expectToBe(true if not '' else false, true)
-                expectToBe(true if not 'hi there' else false, false)
-                done()
-            })
-        })
+		describe('operator Bool', function() {
+			it('should return truthy for non-empty strings', function(done function<void>()) {
+				expectToBe(true if not '' else false, true)
+				expectToBe(true if not 'hi there' else false, false)
+				done()
+			})
+		})
 
-        describe('operator Slice', function() {
-            it('should return a string for normal indexes', function(done function<void>()) {
-                expectToBe('hello world'[0:5], 'hello')
-                expectToBe('hello world'[0:7], 'hello w')
-                expectToBe('hello world'[2:7], 'llo w')
-                done()
-            })
+		describe('operator Slice', function() {
+			it('should return a string for normal indexes', function(done function<void>()) {
+				expectToBe('hello world'[0:5], 'hello')
+				expectToBe('hello world'[0:7], 'hello w')
+				expectToBe('hello world'[2:7], 'llo w')
+				done()
+			})
 
-            it('should return a string for open ended indexes', function(done function<void>()) {
-                expectToBe('hello world'[0:], 'hello world')
-                expectToBe('hello world'[2:], 'llo world')
-                done()
-            })
+			it('should return a string for open ended indexes', function(done function<void>()) {
+				expectToBe('hello world'[0:], 'hello world')
+				expectToBe('hello world'[2:], 'llo world')
+				done()
+			})
 
-            it('should return a string for open started indexes', function(done function<void>()) {
-                expectToBe('hello world'[:5], 'hello')
-                expectToBe('hello world'[:7], 'hello w')
-                done()
-            })
+			it('should return a string for open started indexes', function(done function<void>()) {
+				expectToBe('hello world'[:5], 'hello')
+				expectToBe('hello world'[:7], 'hello w')
+				done()
+			})
 
-            it('should return a string for negative indexes', function(done function<void>()) {
-                expectToBe('hello world'[-1:1], '')
-                expectToBe('hello world'[-1:], 'd')
-                expectToBe('hello world'[-3:-1], 'rl')
-                done()
-            })
-        })
+			it('should return a string for negative indexes', function(done function<void>()) {
+				expectToBe('hello world'[-1:1], '')
+				expectToBe('hello world'[-1:], 'd')
+				expectToBe('hello world'[-3:-1], 'rl')
+				done()
+			})
+		})
 
-        describe('.Trim', function() {
-             it('should trim all whitespace from the start and end of the string', function(done function<void>()) {
-                expectToBe(''.Trim(), '')
-                expectToBe('hello world'.Trim(), 'hello world')
-                expectToBe('    hello world'.Trim(), 'hello world')
-                expectToBe('hello world    '.Trim(), 'hello world')
-                expectToBe('    hello world    '.Trim(), 'hello world')
-                done()
-             })
-        })
+		describe('.Trim', function() {
+			it('should trim all whitespace from the start and end of the string', function(done function<void>()) {
+				expectToBe(''.Trim(), '')
+				expectToBe('hello world'.Trim(), 'hello world')
+				expectToBe('    hello world'.Trim(), 'hello world')
+				expectToBe('hello world    '.Trim(), 'hello world')
+				expectToBe('    hello world    '.Trim(), 'hello world')
+				done()
+			})
+		})
 
-        describe('.ToLowerCase', function() {
-             it('should convert the string to lowercase', function(done function<void>()) {
-                expectToBe(''.ToLowerCase(), '')
-                expectToBe('hello world'.ToLowerCase(), 'hello world')
-                expectToBe('HelLo WOrld'.ToLowerCase(), 'hello world')
-               done()
-             })
-        })
+		describe('.ToLowerCase', function() {
+			it('should convert the string to lowercase', function(done function<void>()) {
+				expectToBe(''.ToLowerCase(), '')
+				expectToBe('hello world'.ToLowerCase(), 'hello world')
+				expectToBe('HelLo WOrld'.ToLowerCase(), 'hello world')
+				done()
+			})
+		})
 
-        describe('.ToUpperCase', function() {
-             it('should convert the string to uppercase', function(done function<void>()) {
-                expectToBe(''.ToUpperCase(), '')
-                expectToBe('hello world'.ToUpperCase(), 'HELLO WORLD')
-                expectToBe('HelLo WOrld'.ToUpperCase(), 'HELLO WORLD')
-               done()
-             })
-        })
+		describe('.ToUpperCase', function() {
+			it('should convert the string to uppercase', function(done function<void>()) {
+				expectToBe(''.ToUpperCase(), '')
+				expectToBe('hello world'.ToUpperCase(), 'HELLO WORLD')
+				expectToBe('HelLo WOrld'.ToUpperCase(), 'HELLO WORLD')
+				done()
+			})
+		})
 
-        describe('.Split', function() {
-            expectSplit := function(split []string, expected []string) {
-                expectToBe(split.Length, expected.Length)
+		describe('.Split', function() {
+			expectSplit := function(split []string, expected []string) {
+				expectToBe(split.Length, expected.Length)
 
-                for index in 0..<expected.Length {
-                    expectToBe(split[index], expected[index])
-                }
-            }
+				for index in 0 ..< expected.Length {
+					expectToBe(split[index], expected[index])
+				}
+			}
 
-            it('should split the string into pieces', function(done function<void>()) {
-              expectSplit(''.Split(' '), [''])
-              expectSplit('hello'.Split(' '), ['hello'])
-              expectSplit('hello world'.Split(' '), ['hello', 'world'])
-              expectSplit('hello world how are you'.Split(' ', 2), ['hello', 'world'])
-              done()
-            })
-        })
+			it('should split the string into pieces', function(done function<void>()) {
+				expectSplit(''.Split(' '), [''])
+				expectSplit('hello'.Split(' '), ['hello'])
+				expectSplit('hello world'.Split(' '), ['hello', 'world'])
+				expectSplit('hello world how are you'.Split(' ', 2), ['hello', 'world'])
+				done()
+			})
+		})
 
-        describe('.HasPrefix', function() {
-             it('should return whether the string starts with the given prefix', function(done function<void>()) {
-                expectToBe(''.HasPrefix('foo'), false)
-                expectToBe('foo'.HasPrefix('foo'), true)
-                expectToBe('afoo'.HasPrefix('foo'), false)
-                expectToBe('fooa'.HasPrefix('foo'), true)
-                done()
-             })
-        })
+		describe('.HasPrefix', function() {
+			it('should return whether the string starts with the given prefix', function(done function<void>()) {
+				expectToBe(''.HasPrefix('foo'), false)
+				expectToBe('foo'.HasPrefix('foo'), true)
+				expectToBe('afoo'.HasPrefix('foo'), false)
+				expectToBe('fooa'.HasPrefix('foo'), true)
+				done()
+			})
+		})
 
-        describe('.HasSuffix', function() {
-             it('should return whether the string ends with the given suffix', function(done function<void>()) {
-                expectToBe(''.HasSuffix('foo'), false)
-                expectToBe('foo'.HasSuffix('foo'), true)
-                expectToBe('afoo'.HasSuffix('foo'), true)
-                expectToBe('fooa'.HasSuffix('foo'), false)
+		describe('.HasSuffix', function() {
+			it('should return whether the string ends with the given suffix', function(done function<void>()) {
+				expectToBe(''.HasSuffix('foo'), false)
+				expectToBe('foo'.HasSuffix('foo'), true)
+				expectToBe('afoo'.HasSuffix('foo'), true)
+				expectToBe('fooa'.HasSuffix('foo'), false)
 
-                expectToBe('fooafoo'.HasSuffix('foo'), true)
-                done()
-             })
-        })
+				expectToBe('fooafoo'.HasSuffix('foo'), true)
+				done()
+			})
+		})
 
-        describe('.Contains and Contains operator', function() {
-            expectContains := function(str string, instring string, expected bool) {
-               expectToBe(str in instring, expected)
-               expectToBe(instring.Contains(str), expected)
-            }
+		describe('.Contains and Contains operator', function() {
+			expectContains := function(str string, instring string, expected bool) {
+				expectToBe(str in instring, expected)
+				expectToBe(instring.Contains(str), expected)
+			}
 
-             it('should return whether the string contains the given string', function(done function<void>()) {
-                expectContains('foo', 'bar', false)
-                expectContains('foo', 'foobar', true)
-                expectContains('foo', 'barfoo', true)
-                expectContains('foo', 'barfoobar', true)
-                done()
-             })
-        })
+			it('should return whether the string contains the given string', function(done function<void>()) {
+				expectContains('foo', 'bar', false)
+				expectContains('foo', 'foobar', true)
+				expectContains('foo', 'barfoo', true)
+				expectContains('foo', 'barfoobar', true)
+				done()
+			})
+		})
 
-        describe('.IsEmpty', function() {
-            it('should return whether the string is empty', function(done function<void>()) {
-               expectToBe(''.IsEmpty, true)
-               expectToBe('hello'.IsEmpty, false)
-               expectToBe('    '.IsEmpty, false)
-               done()
-            })
-        })
+		describe('.IsEmpty', function() {
+			it('should return whether the string is empty', function(done function<void>()) {
+				expectToBe(''.IsEmpty, true)
+				expectToBe('hello'.IsEmpty, false)
+				expectToBe('    '.IsEmpty, false)
+				done()
+			})
+		})
 
-        describe('.Length', function() {
-            it('should return the length of the string', function(done function<void>()) {
-               expectToBe(''.Length, 0)
-               expectToBe('hello'.Length, 5)
-               expectToBe('     '.Length, 5)
-               done()
-            })
-        })
-    })
+		describe('.Length', function() {
+			it('should return the length of the string', function(done function<void>()) {
+				expectToBe(''.Length, 0)
+				expectToBe('hello'.Length, 5)
+				expectToBe('     '.Length, 5)
+				done()
+			})
+		})
+	})
 }

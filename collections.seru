@@ -78,11 +78,16 @@ type Mapping<T> : Object {
 	}
 
 	/**
-	 * Keys returns a slice of the keys currently in the Mapping.
+	 * Keys returns a stream of the keys currently in the Mapping.
 	 */
-	property<[]string> Keys {
+	property<string*> Keys {
 		get {
-			return Slice<string>.overArray(Object.keys(Object(this)))
+			nativeKeys := Object.keys(Object(this))
+			for index in 0..< int(nativeKeys.length) {
+				yield string(nativeKeys[index].(NativeString))
+			}
+
+			yield break
 		}
 	}
 
@@ -91,7 +96,7 @@ type Mapping<T> : Object {
 	 */
 	property<bool> IsEmpty {
 		get {
-			return this.Keys.Length == 0
+			return int(Object.keys(Object(this)).length) == 0
 		}
 	}
 
@@ -229,7 +234,20 @@ type Slice<T> : Array {
 	 * IndexOf returns the index of the `element` in this slice or null if none.
 	 */
 	function<int?> IndexOf(element T) {
-		var foundIndex = int(Array(this).indexOf(element, &0))
+		// Check directly.
+		var foundIndex = int(Array(this).indexOf(&element, &0))
+		if foundIndex >= 0 {
+			return foundIndex
+		}
+
+		// Unbox the contents of the slice, so we can compare by value if necessary.
+		normalized := Array.new()
+		for index in 0..<this.Length {
+			normalized.push(&this[index])
+		}
+
+		// Check unboxed.
+		foundIndex = int(normalized.indexOf(&element, &0))
 		if foundIndex < 0 {
 			return null
 		}
@@ -433,6 +451,24 @@ class Set<T : mappable> {
 	}
 
 	/**
+	 * Of returns a set containing the elements found in the given `stream`.
+	 */
+	constructor Of(stream T*) {
+		s := Set<T>.Empty()
+		for element in stream {
+			s.Add(element)
+		}
+		return s
+	}
+
+	/**
+	 * From returns a set containing the elements found in the given `streamable`.
+	 */
+	constructor From(streamable streamable<T>) {
+		return Set<T>.Of(streamable.Stream())
+	}
+
+	/**
 	 * Add adds the given `item` to the set (if not already present). Returns true if the `item`
 	 * was added.
 	 */
@@ -565,9 +601,8 @@ class Map<T : mappable, Q> {
 
 	operator SetIndex(key T, value Q) {
 		var keyString = key.MapKey.String()
-		if this.keys.Add(key) {
-			this.internalObject[NativeString(keyString)] = value
-		}
+		this.keys.Add(key)
+		this.internalObject[NativeString(keyString)] = value
 	}
 
 	/**
