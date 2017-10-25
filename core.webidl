@@ -128,7 +128,7 @@ interface Function2 {
 
 [NoInterfaceObject]
 interface JSON {
-  static Object parse(any text, optional any reviver);
+  static Object parse(String text, optional any reviver);
   static String stringify(any value, optional any replacer, optional any space);
 };
 
