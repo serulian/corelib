@@ -1,5 +1,8 @@
 # Change Log
 
+## [v0.0.2](https://github.com/serulian/corelib/tree/v0.0.2) (2017-10-26)
+[Full Changelog](https://github.com/serulian/corelib/compare/v0.0.1...v0.0.2)
+
 ## [v0.0.1](https://github.com/serulian/corelib/tree/v0.0.1) (2017-10-25)
 **Merged pull requests:**
 
