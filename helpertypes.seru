@@ -8,12 +8,12 @@ class Tuple<T, Q> {
 	/**
 	 * First is the first value in the tuple.
 	 */
-	var<T?> First = null
+	var First T? = null
 
 	/**
 	 * Second is the second value in the tuple.
 	 */
-	var<Q?> Second = null
+	var Second Q? = null
 
 	/**
 	 * Build constructs a tuple of the `first` and `second` values.
@@ -31,22 +31,18 @@ class Tuple<T, Q> {
  */
 @•typealias('$intstream')
 class IntStream {
-	var<int> start
-	var<int> end
-	var<int> current
+	var start int
+	var end int
+	var current int
 
 	/**
 	 * OverRange returns a stream over the range of integers found between `start` and `end`, **inclusive**.
 	 */
 	constructor OverRange(start int, end int) {
-		return IntStream{
-			start: start,
-			end: end,
-			current: start,
-		}
+		return IntStream{start: start, end: end, current: start}
 	}
 
-	function<Tuple<int, bool>> Next() {
+	function Next() Tuple<int, bool> {
 		if this.current <= this.end {
 			var t = Tuple<int, bool>.Build(this.current, true)
 			this.current = this.current + 1
@@ -65,10 +61,8 @@ type SimpleError : string {
 		return SimpleError(message)
 	}
 
-	property<string> Message {
-		get {
-			return string(this)
-		}
+	property Message string {
+		get { return string(this) }
 	}
 }
 
@@ -81,10 +75,7 @@ type WrappedError : NativeError {
 		return WrappedError(err)
 	}
 
-	property<string> Message {
-		get {
-			return string(NativeError(this).message)
-		}
+	property Message string {
+		get { return string(NativeError(this).message) }
 	}
 }
-

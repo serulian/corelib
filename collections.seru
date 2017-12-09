@@ -2,27 +2,26 @@ from webidl`core` import Array
 from webidl`core` import Number
 from webidl`core` import Object
 from webidl`core` import String as NativeString
-from primitives import Integer
+
 from helpertypes import SimpleError
 from helpertypes import Tuple
+from primitives import Integer
 
 /**
  * listStream defines a stream over the contents of a list.
  */
 class listStream<I> {
-	var<List<I>> list
-	var<int> index = 0
+	var list List<I>
+	var index int = 0
 
 	/**
 	 * forList creates a new listStream over the items in the given `list`.
 	 */
 	constructor forList(list List<I>) {
-		return listStream<I>{
-			list: list,
-		}
+		return listStream<I>{list: list}
 	}
 
-	function<Tuple<I, bool>> Next() {
+	function Next() Tuple<I, bool> {
 		if this.index >= this.list.Count {
 			return Tuple<I, bool>.Build(null, false)
 		}
@@ -36,19 +35,17 @@ class listStream<I> {
  * sliceStream defines a stream over the contents of a slice.
  */
 class sliceStream<I> {
-	var<Slice<I>> slice
-	var<int> index = 0
+	var slice Slice<I>
+	var index int = 0
 
 	/**
 	 * forStream returns a new sliceStream over the items in the given `slice`.
 	 */
 	constructor forStream(slice Slice<I>) {
-		return sliceStream<I>{
-			slice: slice,
-		}
+		return sliceStream<I>{slice: slice}
 	}
 
-	function<Tuple<I, bool>> Next() {
+	function Next() Tuple<I, bool> {
 		if this.index >= this.slice.Length {
 			return Tuple<I, bool>.Build(null, false)
 		}
@@ -67,7 +64,7 @@ type Mapping<T> : Object {
 	 * Empty returns an empty mapping.
 	 */
 	constructor Empty() {
-	    return Mapping<T>(Object.new())
+		return Mapping<T>(Object.new())
 	}
 
 	/**
@@ -80,10 +77,10 @@ type Mapping<T> : Object {
 	/**
 	 * Keys returns a stream of the keys currently in the Mapping.
 	 */
-	property<string*> Keys {
+	property Keys string* {
 		get {
 			nativeKeys := Object.keys(Object(this))
-			for index in 0..< int(nativeKeys.length) {
+			for index in 0 ..< int(nativeKeys.length) {
 				yield string(nativeKeys[index].(NativeString))
 			}
 
@@ -94,7 +91,7 @@ type Mapping<T> : Object {
 	/**
 	 * IsEmpty returns true if the mapping is empty.
 	 */
-	property<bool> IsEmpty {
+	property IsEmpty bool {
 		get {
 			return int(Object.keys(Object(this)).length) == 0
 		}
@@ -103,7 +100,7 @@ type Mapping<T> : Object {
 	/**
 	 * Clone makes a copy of the Mapping.
 	 */
-	function<Mapping<T>> Clone() {
+	function Clone() Mapping<T> {
 		copy := Object.new()
 		for existingKey in this.Keys {
 			copy[&existingKey] = this[existingKey]
@@ -114,7 +111,7 @@ type Mapping<T> : Object {
 	/**
 	 * WithEntry returns a copy of the Mapping, with the given `key` set to the given `value`.
 	 */
-	function<Mapping<T>> WithEntry(key string, value T) {
+	function WithEntry(key string, value T) Mapping<T> {
 		copy := this.Clone()
 		var o = Object(copy)
 		o[&key] = value
@@ -125,16 +122,13 @@ type Mapping<T> : Object {
 		return !value.IsEmpty
 	}
 
-	operator<T?> Index(key string) {
+	operator Index(key string) T? {
 		var value = Object(this)[&key]
-		if value is null {
-			return null
-		}
+		if value is null { return null }
 
 		return value.(T)
-	}	
+	}
 }
-
 
 /**
  * Slice defines a well-typed static (read-only) list of items.
@@ -144,9 +138,7 @@ type Slice<T> : Array {
 	/**
 	 * Empty returns an empty slice.
 	 */
-	constructor Empty() {
-	    return Slice<T>(Array.new())
-	}
+	constructor Empty() { return Slice<T>(Array.new()) }
 
 	/**
 	 * From returns a slice representing the `items` in the stream.
@@ -173,7 +165,7 @@ type Slice<T> : Array {
 		return Slice<T>(arr)
 	}
 
-	operator<Slice<T>> Slice(startindex int?, endindex int?) {
+	operator Slice(startindex int?, endindex int?) Slice<T> {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Length
 
@@ -185,14 +177,12 @@ type Slice<T> : Array {
 			end = end + this.Length
 		}
 
-		if start >= end {
-			return Slice<T>.Empty()
-		}
+		if start >= end { return Slice<T>.Empty() }
 
 		return Slice<T>.overArray(Array(this).slice(Number(start), Number(end)))
 	}
 
-	operator<T> Index(index int) {
+	operator Index(index int) T {
 		var finalIndex = index
 		if finalIndex < 0 {
 			finalIndex = this.Length + index
@@ -208,55 +198,47 @@ type Slice<T> : Array {
 	/**
 	 * Stream returns a stream of all the items in the slice.
 	 */
-	function<T*> Stream() {
+	function Stream() T* {
 		return sliceStream<T>.forStream(this)
 	}
 
 	/**
 	 * Length returns the length of the slice.
 	 */
-	property<int> Length {
-		get {
-			return int(Array(this).length)
-		}
+	property Length int {
+		get { return int(Array(this).length) }
 	}
 
 	/**
 	 * IsEmpty returns true if the slice is empty.
 	 */
-	property<bool> IsEmpty {
-		get {
-			return this.Length == 0
-		}
+	property IsEmpty bool {
+		get { return this.Length == 0 }
 	}
 
 	/**
 	 * IndexOf returns the index of the `element` in this slice or null if none.
 	 */
-	function<int?> IndexOf(element T) {
+	function IndexOf(element T) int? {
 		// Check directly.
 		var foundIndex = int(Array(this).indexOf(&element, &0))
-		if foundIndex >= 0 {
-			return foundIndex
-		}
+		if foundIndex >= 0 { return foundIndex }
 
 		// Unbox the contents of the slice, so we can compare by value if necessary.
 		normalized := Array.new()
-		for index in 0..<this.Length {
+		for index in 0 ..< this.Length {
 			normalized.push(&this[index])
 		}
 
 		// Check unboxed.
 		foundIndex = int(normalized.indexOf(&element, &0))
-		if foundIndex < 0 {
-			return null
-		}
+		if foundIndex < 0 { return null }
 
 		return foundIndex
 	}
 
 	operator Contains(value T) {
-		return (this.IndexOf(value) ?? -1) >= 0
+		return this.IndexOf(value) ?? -1 >= 0
 	}
 
 	operator Bool(value Slice<T>) {
@@ -269,15 +251,15 @@ type Slice<T> : Array {
  */
 @•typealias('list')
 class List<T> {
-	var<Array> internalArray = Array.new()
-	var<Array> indexArray = Array.new()
+	var internalArray Array = Array.new()
+	var indexArray Array = Array.new()
 
 	/**
 	 * forArray creates a List for the given `arr`.
 	 */
 	constructor forArray(arr Array) {
 		var l = List<T>.Empty()
-		for i in 0 .. (Integer(arr.length) - 1) {
+		for i in 0 .. Integer(arr.length) - 1 {
 			l.Add(arr[Number(i)].(T))
 		}
 		return l
@@ -286,9 +268,7 @@ class List<T> {
 	/**
 	 * Empty returns an empty list.
 	 */
-	constructor Empty() {
-		return List<T>.new()
-	}
+	constructor Empty() { return List<T>.new() }
 
 	/**
 	 * CopyOf returns a List which is a copy of the `other` list.
@@ -327,10 +307,10 @@ class List<T> {
 	}
 
 	operator Contains(value T) {
-		return (this.IndexOf(value) ?? -1) >= 0
+		return this.IndexOf(value) ?? -1 >= 0
 	}
 
-	operator<Slice<T>> Slice(startindex int?, endindex int?) {
+	operator Slice(startindex int?, endindex int?) Slice<T> {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Count
 
@@ -342,14 +322,12 @@ class List<T> {
 			end = end + this.Count
 		}
 
-		if start >= end {
-			return Slice<T>.Empty()
-		}
+		if start >= end { return Slice<T>.Empty() }
 
 		return Slice<T>.overArray(this.internalArray.slice(Number(start), Number(end)))
 	}
 
-	operator<T> Index(index int) {
+	operator Index(index int) T {
 		var finalIndex = index
 		if finalIndex < 0 {
 			finalIndex = this.Count + index
@@ -378,14 +356,14 @@ class List<T> {
 	/**
 	 * Stream returns a stream of all the items in the list.
 	 */
-	function<stream<T>> Stream() {
+	function Stream() stream<T> {
 		return listStream<T>.forList(this)
 	}
 
 	/**
 	 * Add adds the given `element` to the list.
 	 */
-	function<void> Add(element T) {
+	function Add(element T) {
 		this.internalArray.push(element)
 		this.indexArray.push(&element)
 	}
@@ -394,24 +372,20 @@ class List<T> {
 	 * Remove removes the given `element` from the list, if it is present. Note that this
 	 * will only remove the first instance found (if any).
 	 */
-	function<void> Remove(element T) {
-	   var index = this.IndexOf(element)
-	   if index is null {
- 	   	 return
- 	   }
+	function Remove(element T) {
+		var index = this.IndexOf(element)
+		if index is null { return }
 
- 	   this.internalArray.splice(Number(index), Number(1))
+		this.internalArray.splice(Number(index), Number(1))
 	}
 
 	/**
 	 * IndexOf returns the index of the `element` in this list or null if none.
 	 */
-	function<int?> IndexOf(element T, startIndex int?) {
+	function IndexOf(element T, startIndex int?) int? {
 		var finalIndex = startIndex ?? 0
 		var foundIndex = int(this.indexArray.indexOf(&element, Number(finalIndex)))
-		if foundIndex < 0 {
-			return null
-		}
+		if foundIndex < 0 { return null }
 
 		return foundIndex
 	}
@@ -419,19 +393,15 @@ class List<T> {
 	/**
 	 * Count returns the number of elements in the list.
 	 */
-	property<int> Count {
-		get {
-			return Integer(this.internalArray.length)
-		}
+	property Count int {
+		get { return Integer(this.internalArray.length) }
 	}
 
 	/**
 	 * IsEmpty returns true if the list is empty.
 	 */
-	property<bool> IsEmpty {
-		get {
-			return this.Count == 0
-		}
+	property IsEmpty bool {
+		get { return this.Count == 0 }
 	}
 }
 
@@ -440,15 +410,13 @@ class List<T> {
  */
 @•typealias('set')
 class Set<T : mappable> {
-	var<Object> keyMap = Object.new()
-	var<List<T>> keys = List<T>.Empty()
+	var keyMap Object = Object.new()
+	var keys List<T> = List<T>.Empty()
 
 	/**
 	 * Empty returns an empty set.
 	 */
-	constructor Empty() {
-		return Set<T>.new()
-	}
+	constructor Empty() { return Set<T>.new() }
 
 	/**
 	 * Of returns a set containing the elements found in the given `stream`.
@@ -472,10 +440,8 @@ class Set<T : mappable> {
 	 * Add adds the given `item` to the set (if not already present). Returns true if the `item`
 	 * was added.
 	 */
-	function<bool> Add(item T) {
-		if this.Contains(item) {
-			return false
-		}
+	function Add(item T) bool {
+		if this.Contains(item) { return false }
 
 		this.keys.Add(item)
 		this.keyMap[NativeString(item.MapKey.String())] = true
@@ -486,10 +452,8 @@ class Set<T : mappable> {
 	 * Remove removes the given `item` from the set (if present). Returns true if the `item`
 	 * was removed.
 	 */
-	function<bool> Remove(item T) {
-		if !this.Contains(item) {
-			return false
-		}
+	function Remove(item T) bool {
+		if !this.Contains(item) { return false }
 
 		this.keys.Remove(item)
 		this.keyMap[NativeString(item.MapKey.String())] = null
@@ -499,24 +463,20 @@ class Set<T : mappable> {
 	/**
 	 * Contains returns true if the set contains the specified `item`.
 	 */
-	function<bool> Contains(item T) {
+	function Contains(item T) bool {
 		return !(this.keyMap[NativeString(item.MapKey.String())] is null)
 	}
 
 	/**
 	 * Stream returns a stream of all the items in the set.
 	 */
-	function<T*> Stream() {
-		return this.keys.Stream()
-	}
+	function Stream() T* { return this.keys.Stream() }
 
 	/**
 	 * IsEmpty returns true if the set is empty.
 	 */
-	property<bool> IsEmpty {
-		get {
-			return this.keys.IsEmpty
-		}
+	property IsEmpty bool {
+		get { return this.keys.IsEmpty }
 	}
 
 	operator Bool(value Set<T>) {
@@ -533,15 +493,13 @@ class Set<T : mappable> {
  */
 @•typealias('map')
 class Map<T : mappable, Q> {
-	var<Object> internalObject = Object.new()
-	var<Set<T>> keys = Set<T>.Empty()
+	var internalObject Object = Object.new()
+	var keys Set<T> = Set<T>.Empty()
 
 	/**
 	 * Empty returns an empty map.
 	 */
-	constructor Empty() {
-		return Map<T, Q>.new()
-	}
+	constructor Empty() { return Map<T, Q>.new() }
 
 	/**
 	 * forArrays constructs and returns a Map from the given `keys` and `values` arrays.
@@ -549,7 +507,7 @@ class Map<T : mappable, Q> {
 	constructor forArrays(keys Array, values Array) {
 		var map = Map<T, Q>.new()
 		var len = int(keys.length)
-		for i in 0..(len - 1) {
+		for i in 0 .. len - 1 {
 			var tKey = keys[Number(i)].(T)
 			map[tKey] = values[Number(i)].(Q)
 		}
@@ -559,42 +517,38 @@ class Map<T : mappable, Q> {
 	/**
 	 * Mapping returns the a Mapping of this Map's values.
 	 */
-	function<Mapping<Q>> Mapping() {
+	function Mapping() Mapping<Q> {
 		return Mapping<Q>(this.internalObject).Clone()
 	}
 
 	/**
 	 * Keys returns a stream of all the keys in the map.
 	 */
-	property<T*> Keys {
-		get {
-			return this.keys.Stream()
-		}
+	property Keys T* {
+		get { return this.keys.Stream() }
 	}
 
 	/**
 	 * RemoveKey removes the the specified `key` from the map (if present).
 	 */
-	function<void> RemoveKey(key T) {
+	function RemoveKey(key T) {
 		var keyString = key.MapKey.String()
 		if this.keys.Remove(key) {
-		  this.internalObject[NativeString(keyString)] = null
+			this.internalObject[NativeString(keyString)] = null
 		}
 	}
 
 	/**
 	 * HasKey returns true if the map contains the specified `key`.
 	 */
-	function<bool> HasKey(key T) {
+	function HasKey(key T) bool {
 		return this.keys.Contains(key)
 	}
 
-	operator<Q?> Index(key T) {
+	operator Index(key T) Q? {
 		var keyString = key.MapKey.String()
 		var value = this.internalObject[NativeString(keyString)]
-		if value is null {
-			return null
-		}
+		if value is null { return null }
 
 		return value.(Q)
 	}
@@ -608,15 +562,11 @@ class Map<T : mappable, Q> {
 	/**
 	 * IsEmpty returns true if the Map is empty.
 	 */
-	property<bool> IsEmpty {
-		get {
-			return this.keys.IsEmpty
-		}
+	property IsEmpty bool {
+		get { return this.keys.IsEmpty }
 	}
 
-	operator Contains(key T) {
-		return this.HasKey(key)
-	}
+	operator Contains(key T) { return this.HasKey(key) }
 
 	operator Bool(value Map<T, Q>) {
 		return !value.IsEmpty

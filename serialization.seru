@@ -11,21 +11,19 @@ class JSON {
 	/**
 	 * Get returns a JSON serializer.
 	 */
-	constructor Get() {
-		return JSON.new()
-	}
+	constructor Get() { return JSON.new() }
 
 	/**
 	 * Stringify returns the JSON string form of the given `mapping`.
 	 */
-	function<string> Stringify(value mapping<any>) {
-	    return string(NativeJSON.stringify(Object(value), Internal.autoUnbox))
+	function Stringify(value mapping<any>) string {
+		return string(NativeJSON.stringify(Object(value), Internal.autoUnbox))
 	}
 
 	/**
 	 * Parse parses the given JSON `value` into a Mapping. Will reject on a parse error.
 	 */
-	function<mapping<any>> Parse(value string) {
+	function Parse(value string) mapping<any> {
 		return mapping<any>(NativeJSON.parse(NativeString(value), Internal.autoBox))
 	}
 }
@@ -35,14 +33,12 @@ class JSON {
  */
 @•typealias('$stringifier')
 interface Stringifier {
-	constructor Get() {
-		return JSON.new()
-	}
+	constructor Get() { return JSON.new() }
 
 	/**
 	 * Stringify converts a Mapping `value` into a string form.
 	 */
-	function<string> Stringify(value mapping<any>)
+	function Stringify(value mapping<any>) string
 }
 
 /**
@@ -50,12 +46,10 @@ interface Stringifier {
  */
 @•typealias('$parser')
 interface Parser {
-	constructor Get() {
-		return JSON.new()
-	}
+	constructor Get() { return JSON.new() }
 
 	/**
 	 * Parse parses the given string `value` into a Mapping. Should reject on failure.
 	 */
-	function<mapping<any>> Parse(value string)
+	function Parse(value string) mapping<any>
 }

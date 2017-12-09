@@ -1,10 +1,10 @@
 from webidl`jasmine` import describe, expect, it
 
-function<void> expectToBe(value any, otherValue any) {
+function expectToBe(value any, otherValue any) {
 	expect(&value).toBe(&otherValue)
 }
 
-function<void> TEST() {
+function TEST() {
 	// Boolean
 	describe('Boolean', function() {
 		describe('.String()', function() {

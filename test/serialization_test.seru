@@ -2,7 +2,7 @@ from @core import List
 
 from webidl`jasmine` import describe, expect, it
 
-function<void> TEST() {
+function TEST() {
 	describe('JSON', function() {
 		describe('.Stringify()', function() {
 			expectSerialization := function(input mapping<any>, expected string) {

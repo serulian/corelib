@@ -5,17 +5,17 @@ from helpertypes import Tuple
  */
 @•typealias('stringable')
 interface Stringable {
-    /**
-     * String returns the string form of the instance.
-     */
-	function<string> String()
+	/**
+	 * String returns the string form of the instance.
+	 */
+	function String() string
 }
 
 /**
  * MapStream runs a mapping function over a `stream`, returning a stream of the values transformed
  * by the `mapper` function.
  */
-function<Q*> MapStream<T, Q>(stream T*, mapper function<Q>(T)) {
+function MapStream<T, Q>(stream T*, mapper function<Q>(T)) Q* {
 	for item in stream {
 		yield mapper(item)
 	}
@@ -30,7 +30,7 @@ interface Stream<T> {
 	 * Next returns a Tuple containing the next value in the stream (if any). If none, the boolean
 	 * of the tuple is false.
 	 */
-	function<Tuple<T, bool>> Next()
+	function Next() Tuple<T, bool>
 }
 
 /**
@@ -41,7 +41,7 @@ interface Streamable<T> {
 	/**
 	 * Stream returns the stream form of the instance.
 	 */
-	function<Stream<T>> Stream()
+	function Stream() Stream<T>
 }
 
 /**
@@ -52,7 +52,7 @@ interface Mappable {
 	/**
 	 * MapKey returns the stringable mapping key for this type.
 	 */
-	property<Stringable> MapKey { get }
+	property MapKey Stringable { get }
 }
 
 /**
@@ -64,13 +64,13 @@ interface Awaitable<T> {
 	 * Then registers a `callback` to invoked with the async result once the operation
 	 * completes successfully.
 	 */
-	function<Awaitable<T>> Then(callback function<void>(T))
+	function Then(callback function<void>(T)) Awaitable<T>
 
 	/**
 	 * Catch registers a `callback` to invoked with the error if the operation
 	 * fails to complete successfully.
 	 */
-	function<Awaitable<T>> Catch(callback function<void>(error))
+	function Catch(callback function<void>(error)) Awaitable<T>
 }
 
 /**
@@ -81,7 +81,7 @@ interface Error {
 	/**
 	 * Message defines the error's human-readable message.
 	 */
-	property<string> Message { get }
+	property Message string { get }
 }
 
 /**
@@ -89,9 +89,9 @@ interface Error {
  */
 @•typealias('releasable')
 interface Releasable {
-    /**
-     * Release defines the function invoked once the resource has left the scope of the
-     * with block.
-     */
-	function<void> Release()
+	/**
+	 * Release defines the function invoked once the resource has left the scope of the
+	 * with block.
+	 */
+	function Release()
 }
