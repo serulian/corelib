@@ -1,8 +1,8 @@
+from webidl`core` import Array
+from webidl`core` import Boolean as NativeBoolean
+from webidl`core` import Math
 from webidl`core` import Number
 from webidl`core` import String as NativeString
-from webidl`core` import Boolean as NativeBoolean
-from webidl`core` import Array
-from webidl`core` import Math
 
 from helpertypes import IntStream
 
@@ -62,23 +62,21 @@ type Integer : Number {
 	/**
 	 * String returns the String form of the integer.
 	 */
-	function<string> String() {
+	function String() string {
 		return String(Number(this).toString())
 	}
 
 	/**
 	 * MapKey returns the key for integers in maps.
 	 */
-	property<stringable> MapKey {
-		get {
-			return 'int::' + this.String()
-		}
+	property MapKey stringable {
+		get { return 'int::' + this.String() }
 	}
 
 	/**
 	 * AsFloat returns this integer as a float.
 	 */
-	function<float64> AsFloat() {
+	function AsFloat() float64 {
 		return float64(Number(this))
 	}
 }
@@ -91,7 +89,7 @@ type Float64 : Number {
 	/**
 	 * String returns the String form of the float.
 	 */
-	function<string> String() {
+	function String() string {
 		return String(Number(this).toString())
 	}
 
@@ -122,21 +120,21 @@ type Float64 : Number {
 	/**
 	 * Floor returns the current float rounded down to the nearest integer.
 	 */
-	function<int> Floor() {
+	function Floor() int {
 		return Integer(Math.floor(Number(this)))
 	}
 
 	/**
 	 * Ceil returns the current float rounded up to the nearest integer.
 	 */
-	function<int> Ceil() {
+	function Ceil() int {
 		return Integer(Math.ceil(Number(this)))
 	}
 
 	/**
 	 * Round returns the current float rounded to the nearest integer.
 	 */
-	function<int> Round() {
+	function Round() int {
 		return Integer(Math.round(Number(this)))
 	}
 }
@@ -149,7 +147,7 @@ type Boolean : NativeBoolean {
 	/**
 	 * String returns the String form of the Boolean.
 	 */
-	function<string> String() {
+	function String() string {
 		return String(NativeBoolean(this).toString())
 	}
 
@@ -157,18 +155,16 @@ type Boolean : NativeBoolean {
 		return Boolean(NativeBoolean(first) == NativeBoolean(second))
 	}
 
-	operator Bool(value bool) {
-		return value
-	}
+	operator Bool(value bool) { return value }
 }
 
 /**
  * formatTemplateString formats the given `pieces` and `values` into a string value.
  */
-function<string> formatTemplateString(pieces []string, values []stringable) {
+function formatTemplateString(pieces []string, values []stringable) string {
 	var overallPieces = Array.new()
 
-	for i in 0 .. (pieces.Length - 1) {
+	for i in 0 .. pieces.Length - 1 {
 		overallPieces.push(NativeString(pieces[i]))
 
 		if i < values.Length {
@@ -192,7 +188,7 @@ type String : NativeString {
 		return String(NativeString(first) + NativeString(second))
 	}
 
-	operator<string> Slice(startindex int?, endindex int?) {
+	operator Slice(startindex int?, endindex int?) string {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Length
 
@@ -204,9 +200,7 @@ type String : NativeString {
 			end = end + this.Length
 		}
 
-		if start >= end {
-			return ''
-		}
+		if start >= end { return '' }
 
 		return String(NativeString(this).substring(Number(start), Number(end)))
 	}
@@ -218,21 +212,21 @@ type String : NativeString {
 	/**
 	 * Trim removes all whitespace from the left and right sides of the string.
 	 */
-	function<string> Trim() {
-	   return String(NativeString(this).trim())
+	function Trim() string {
+		return String(NativeString(this).trim())
 	}
 
 	/**
 	 * ToLowerCase returns the string in lowercase.
 	 */
-	function<string> ToLowerCase() {
+	function ToLowerCase() string {
 		return String(NativeString(this).toLowerCase())
 	}
 
 	/**
 	 * ToUpperCase returns the string in uppercase.
 	 */
-	function<string> ToUpperCase() {
+	function ToUpperCase() string {
 		return String(NativeString(this).toUpperCase())
 	}
 
@@ -240,7 +234,7 @@ type String : NativeString {
 	 * Split splits the string into a slice of strings based on a `separator`. If `limit` is specified,
 	 * then the string will be split into a maximum of `limit` pieces.
 	 */
-	function<[]string> Split(separator string, limit int?) {
+	function Split(separator string, limit int?) []string {
 		var arr = NativeString(this).split(NativeString(separator), Number(limit ?? -1))
 		return slice<string>.ForArray(arr)
 	}
@@ -248,14 +242,14 @@ type String : NativeString {
 	/**
 	 * HasPrefix returns true if the string starts with the given `prefix`.
 	 */
-	function<bool> HasPrefix(prefix string) {
+	function HasPrefix(prefix string) bool {
 		return this[0:prefix.Length] == prefix
 	}
 
 	/**
 	 * HasSuffix returns true if the string ends with the given `suffix`.
 	 */
-	function<bool> HasSuffix(suffix string) {
+	function HasSuffix(suffix string) bool {
 		return this[this.Length - suffix.Length:this.Length] == suffix
 	}
 
@@ -263,36 +257,32 @@ type String : NativeString {
 	 * Contains returns true if this string contains the `otherString`. Note that this check
 	 * is *case-sensitive*.
 	 */
-	function<bool> Contains(otherString string) {
-	   index := int(NativeString(this).indexOf(&otherString))
-	   return index >= 0
+	function Contains(otherString string) bool {
+		index := int(NativeString(this).indexOf(&otherString))
+		return index >= 0
 	}
 
 	operator Contains(other string) {
 		return this.Contains(other)
 	}
 
-	function<string> String() {
-		return this
-	}
+	function String() string { return this }
 
-	property<stringable> MapKey {
+	property MapKey stringable {
 		get { return this }
 	}
 
 	/**
 	 * IsEmpty returns whether the string is empty.
 	 */
-	property<bool> IsEmpty {
+	property IsEmpty bool {
 		get { return this.Length == 0 }
 	}
 
 	/**
 	 * Length returns the length of the string.
 	 */
-	property<int> Length {
-		get {
-			return Integer(NativeString(this).length)
-		}
+	property Length int {
+		get { return Integer(NativeString(this).length) }
 	}
 }

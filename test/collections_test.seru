@@ -2,11 +2,11 @@ from @core import Mapping, Slice, List, Set, Map
 
 from webidl`jasmine` import describe, expect, it, fail
 
-function<void> expectToBe(value any, otherValue any) {
+function expectToBe(value any, otherValue any) {
 	expect(&value).toBe(&otherValue)
 }
 
-function<void> TEST() {
+function TEST() {
 	// Mapping
 	describe('Mapping', function() {
 		describe('.Empty()', function() {
@@ -44,7 +44,7 @@ function<void> TEST() {
 			keys := list<string>.Of(value.Keys)
 			expectToBe(keys.Count, expectedKeys.Length)
 			for key in expectedKeys {
-				if not (key in keys) {
+				if not key in keys {
 					fail(`Missing key ${key}`)
 				}
 			}
