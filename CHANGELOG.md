@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.2.0](https://github.com/serulian/corelib/tree/v0.2.0) (2017-12-09)
+[Full Changelog](https://github.com/serulian/corelib/compare/v0.1.0...v0.2.0)
+
+**Merged pull requests:**
+
+- Reformat for recent syntax changes [\#9](https://github.com/serulian/corelib/pull/9) ([josephschorr](https://github.com/josephschorr))
+
 ## [v0.1.0](https://github.com/serulian/corelib/tree/v0.1.0) (2017-10-29)
 [Full Changelog](https://github.com/serulian/corelib/compare/v0.0.2...v0.1.0)
 
