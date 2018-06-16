@@ -321,6 +321,98 @@ function TEST() {
 			})
 		})
 
+		describe('function Stream', function() {
+			it('should return the whole string', function(done function<void>()) {
+				strValue := 'hello world'
+				var computed = ''
+				for c in strValue {
+					computed = computed + c
+				}
+				expectToBe(computed, strValue)
+				done()
+			})
+		})
+
+		describe('function Reverse', function() {
+			it('should return the whole string reversed', function(done function<void>()) {
+				expectToBe('hello world'.Reverse(), 'dlrow olleh')
+				done()
+			})
+		})
+
+		describe('function IndexOf', function() {
+			it('should find the substring', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('h'), 0)
+				expectToBe('hello world'.IndexOf('l'), 2)
+				done()
+			})
+
+			it('should find the substring with negative starting index', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('l', -3), 9)
+				done()
+			})			
+
+			it('should find the second instance of substring', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('l', 3), 3)
+				done()
+			})
+
+			it('should find the third instance of substring', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('l', 4), 9)
+				done()
+			})
+
+			it('should return null if the string cannot be found', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('ll', 4), null)
+				done()
+			})
+		})
+
+		describe('function LastIndexOf', function() {
+			it('should find the substring', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('h'), 0)
+				expectToBe('hello world'.LastIndexOf('l'), 9)
+				done()
+			})
+
+			it('should find the substring with negative starting index', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('l', -3), 3)
+				done()
+			})			
+
+			it('should find the second instance of substring', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('l', 6), 3)
+				done()
+			})
+
+			it('should return null if the string cannot be found', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('ll', 1), null)
+				done()
+			})
+		})
+
+		describe('operator Index', function() {
+			it('should return a character for normal indexes', function(done function<void>()) {
+				expectToBe('hello world'[0], 'h')
+				expectToBe('hello world'[1], 'e')
+				expectToBe('hello world'[2], 'l')
+				done()
+			})
+
+			it('should return a character for negative indexes', function(done function<void>()) {
+				expectToBe('hello world'[-1], 'd')
+				expectToBe('hello world'[-2], 'l')
+				expectToBe('hello world'[-3], 'r')
+				done()
+			})
+
+			it('should fail for an invalid index', function(done function<void>()) {
+				_, err := 'hi'[4]
+				expectToBe(err is not null, true)
+				done()
+			})
+		})
+
 		describe('operator Slice', function() {
 			it('should return a string for normal indexes', function(done function<void>()) {
 				expectToBe('hello world'[0:5], 'hello')

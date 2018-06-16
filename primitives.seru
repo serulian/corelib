@@ -4,7 +4,7 @@ from webidl`core` import Math
 from webidl`core` import Number
 from webidl`core` import String as NativeString
 
-from helpertypes import IntStream
+from helpertypes import IntStream, SimpleError
 
 /**
  * Type marker for functions.
@@ -189,6 +189,52 @@ type String : NativeString {
 	}
 
 	/**
+	 * Stream returns a stream of all the characters in the string. Note that this *will*
+	 * return pieces of unicode code points.
+	 */
+	function Stream() string* {
+		for index in 0..<this.Length {
+			yield this[index]
+		}
+	}
+
+	/**
+	 * Reverse returns the contents of the string, but in reverse.
+	 */
+	function Reverse() string {
+		var reversed = ''
+		for c in this {
+			reversed = c + reversed
+		}
+		return reversed
+	}
+
+	/**
+	 * normalizeIndex normalizes the given index to within the range of the string. Raises
+	 * an error if the index is completely out of bounds.
+	 */
+	function normalizeIndex(index int) int {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Length + index
+		}
+
+		if finalIndex >= this.Length || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		return finalIndex
+	}
+
+	/**
+	 * Index returns the `index`-th character in the string. Note that for unicode characters,
+	 * this *will* index into the code point.
+	 */
+	operator Index(index int) string {
+		return String(NativeString(this)[this.normalizeIndex(index)])
+	}
+
+	/**
 	 * Slice returns a slice of the current string. If `startindex` is not specified,
 	 * the string will begin at index 0. If `endindex` is not specified, the string
 	 * will end at its natural end.
@@ -265,6 +311,42 @@ type String : NativeString {
 	function Contains(otherString string) bool {
 		index := int(NativeString(this).indexOf(&otherString))
 		return index >= 0
+	}
+
+	/**
+	 * IndexOf returns the index of `otherString` in this string. If `startIndex` is specified,
+	 * the search will begin at that index. Returns null if the string could not be found.
+	 */
+	function IndexOf(otherString string, startIndex int?) int? {
+		var normalizedIndex int? = startIndex
+		if startIndex is not null {
+			normalizedIndex = this.normalizeIndex(startIndex)
+		}
+
+		index := int(NativeString(this).indexOf(&otherString, &normalizedIndex))
+		if index < 0 {
+			return null
+		}
+
+		return index
+	}
+
+	/**
+	 * LastIndexOf returns the last index of `otherString` in this string. If `startIndex` is specified,
+	 * the search will begin at that index. Returns null if the string could not be found.
+	 */
+	function LastIndexOf(otherString string, startIndex int?) int? {
+		var normalizedIndex int? = startIndex
+		if startIndex is not null {
+			normalizedIndex = this.normalizeIndex(startIndex)
+		}
+
+		index := int(NativeString(this).lastIndexOf(&otherString, &normalizedIndex))
+		if index < 0 {
+			return null
+		}
+
+		return index
 	}
 
 	operator Contains(other string) {
