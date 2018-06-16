@@ -347,6 +347,11 @@ function TEST() {
 				done()
 			})
 
+			it('should find the substring with negative starting index', function(done function<void>()) {
+				expectToBe('hello world'.IndexOf('l', -3), 9)
+				done()
+			})			
+
 			it('should find the second instance of substring', function(done function<void>()) {
 				expectToBe('hello world'.IndexOf('l', 3), 3)
 				done()
@@ -369,6 +374,11 @@ function TEST() {
 				expectToBe('hello world'.LastIndexOf('l'), 9)
 				done()
 			})
+
+			it('should find the substring with negative starting index', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('l', -3), 3)
+				done()
+			})			
 
 			it('should find the second instance of substring', function(done function<void>()) {
 				expectToBe('hello world'.LastIndexOf('l', 6), 3)

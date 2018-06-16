@@ -210,10 +210,10 @@ type String : NativeString {
 	}
 
 	/**
-	 * Index returns the `index`-th character in the string. Note that for unicode characters,
-	 * this *will* index into the code point.
+	 * normalizeIndex normalizes the given index to within the range of the string. Raises
+	 * an error if the index is completely out of bounds.
 	 */
-	operator Index(index int) string {
+	function normalizeIndex(index int) int {
 		var finalIndex = index
 		if finalIndex < 0 {
 			finalIndex = this.Length + index
@@ -223,7 +223,15 @@ type String : NativeString {
 			reject SimpleError.WithMessage('Index is out of bounds')
 		}
 
-		return String(NativeString(this)[finalIndex])
+		return finalIndex
+	}
+
+	/**
+	 * Index returns the `index`-th character in the string. Note that for unicode characters,
+	 * this *will* index into the code point.
+	 */
+	operator Index(index int) string {
+		return String(NativeString(this)[this.normalizeIndex(index)])
 	}
 
 	/**
@@ -310,7 +318,12 @@ type String : NativeString {
 	 * the search will begin at that index. Returns null if the string could not be found.
 	 */
 	function IndexOf(otherString string, startIndex int?) int? {
-		index := int(NativeString(this).indexOf(&otherString, &startIndex))
+		var normalizedIndex int? = startIndex
+		if startIndex is not null {
+			normalizedIndex = this.normalizeIndex(startIndex)
+		}
+
+		index := int(NativeString(this).indexOf(&otherString, &normalizedIndex))
 		if index < 0 {
 			return null
 		}
@@ -323,7 +336,12 @@ type String : NativeString {
 	 * the search will begin at that index. Returns null if the string could not be found.
 	 */
 	function LastIndexOf(otherString string, startIndex int?) int? {
-		index := int(NativeString(this).lastIndexOf(&otherString, &startIndex))
+		var normalizedIndex int? = startIndex
+		if startIndex is not null {
+			normalizedIndex = this.normalizeIndex(startIndex)
+		}
+
+		index := int(NativeString(this).lastIndexOf(&otherString, &normalizedIndex))
 		if index < 0 {
 			return null
 		}
