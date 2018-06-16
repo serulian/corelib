@@ -305,6 +305,19 @@ type String : NativeString {
 		return index >= 0
 	}
 
+	/**
+	 * IndexOf returns the index of `otherString` in this string. If `startIndex` is specified,
+	 * the search will begin at that index. Returns null if the string could not be found.
+	 */
+	function IndexOf(otherString string, startIndex int?) int? {
+		index := int(NativeString(this).indexOf(&otherString, &startIndex))
+		if index < 0 {
+			return null
+		}
+
+		return index
+	}
+
 	operator Contains(other string) {
 		return this.Contains(other)
 	}
