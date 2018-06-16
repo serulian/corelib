@@ -18,14 +18,14 @@ class functionType<T> {}
 @•typealias('int')
 type Integer : Number {
 	/**
-	 * Range returns a range of integers.
+	 * Range returns a range of integers, starting at `start` and ending at `end`, inclusive.
 	 */
 	operator Range(start int, end int) {
 		return IntStream.OverRange(start, end)
 	}
 
 	/**
-	 * ExclusiveRange returns an exclusive range of integers.
+	 * ExclusiveRange returns an exclusive range of integers, starting at `start` and ending at `end - 1`.
 	 */
 	operator ExclusiveRange(start int, end int) {
 		return IntStream.OverRange(start, end - 1)
@@ -188,6 +188,11 @@ type String : NativeString {
 		return String(NativeString(first) + NativeString(second))
 	}
 
+	/**
+	 * Slice returns a slice of the current string. If `startindex` is not specified,
+	 * the string will begin at index 0. If `endindex` is not specified, the string
+	 * will end at its natural end.
+	 */
 	operator Slice(startindex int?, endindex int?) string {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Length
