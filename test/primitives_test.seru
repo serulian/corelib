@@ -363,6 +363,24 @@ function TEST() {
 			})
 		})
 
+		describe('function LastIndexOf', function() {
+			it('should find the substring', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('h'), 0)
+				expectToBe('hello world'.LastIndexOf('l'), 9)
+				done()
+			})
+
+			it('should find the second instance of substring', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('l', 6), 3)
+				done()
+			})
+
+			it('should return null if the string cannot be found', function(done function<void>()) {
+				expectToBe('hello world'.LastIndexOf('ll', 1), null)
+				done()
+			})
+		})
+
 		describe('operator Index', function() {
 			it('should return a character for normal indexes', function(done function<void>()) {
 				expectToBe('hello world'[0], 'h')

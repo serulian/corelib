@@ -318,6 +318,19 @@ type String : NativeString {
 		return index
 	}
 
+	/**
+	 * LastIndexOf returns the last index of `otherString` in this string. If `startIndex` is specified,
+	 * the search will begin at that index. Returns null if the string could not be found.
+	 */
+	function LastIndexOf(otherString string, startIndex int?) int? {
+		index := int(NativeString(this).lastIndexOf(&otherString, &startIndex))
+		if index < 0 {
+			return null
+		}
+
+		return index
+	}
+
 	operator Contains(other string) {
 		return this.Contains(other)
 	}
