@@ -189,7 +189,8 @@ type String : NativeString {
 	}
 
 	/**
-	 * Stream returns a stream of all the characters in the string.
+	 * Stream returns a stream of all the characters in the string. Note that this *will*
+	 * return pieces of unicode code points.
 	 */
 	function Stream() string* {
 		for index in 0..<this.Length {
