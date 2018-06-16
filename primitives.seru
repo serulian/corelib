@@ -199,6 +199,17 @@ type String : NativeString {
 	}
 
 	/**
+	 * Reverse returns the contents of the string, but in reverse.
+	 */
+	function Reverse() string {
+		var reversed = ''
+		for c in this {
+			reversed = c + reversed
+		}
+		return reversed
+	}
+
+	/**
 	 * Index returns the `index`-th character in the string. Note that for unicode characters,
 	 * this *will* index into the code point.
 	 */

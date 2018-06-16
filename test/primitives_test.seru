@@ -333,6 +333,13 @@ function TEST() {
 			})
 		})
 
+		describe('function Reverse', function() {
+			it('should return the whole string reversed', function(done function<void>()) {
+				expectToBe('hello world'.Reverse(), 'dlrow olleh')
+				done()
+			})
+		})
+
 		describe('operator Index', function() {
 			it('should return a character for normal indexes', function(done function<void>()) {
 				expectToBe('hello world'[0], 'h')
