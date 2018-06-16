@@ -189,6 +189,15 @@ type String : NativeString {
 	}
 
 	/**
+	 * Stream returns a stream of all the characters in the string.
+	 */
+	function Stream() string* {
+		for index in 0..<this.Length {
+			yield this[index]
+		}
+	}
+
+	/**
 	 * Index returns the `index`-th character in the string. Note that for unicode characters,
 	 * this *will* index into the code point.
 	 */

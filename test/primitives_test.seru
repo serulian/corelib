@@ -321,6 +321,18 @@ function TEST() {
 			})
 		})
 
+		describe('function Stream', function() {
+			it('should return the whole string', function(done function<void>()) {
+				strValue := 'hello world'
+				var computed = ''
+				for c in strValue {
+					computed = computed + c
+				}
+				expectToBe(computed, strValue)
+				done()
+			})
+		})
+
 		describe('operator Index', function() {
 			it('should return a character for normal indexes', function(done function<void>()) {
 				expectToBe('hello world'[0], 'h')
