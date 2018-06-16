@@ -321,6 +321,28 @@ function TEST() {
 			})
 		})
 
+		describe('operator Index', function() {
+			it('should return a character for normal indexes', function(done function<void>()) {
+				expectToBe('hello world'[0], 'h')
+				expectToBe('hello world'[1], 'e')
+				expectToBe('hello world'[2], 'l')
+				done()
+			})
+
+			it('should return a character for negative indexes', function(done function<void>()) {
+				expectToBe('hello world'[-1], 'd')
+				expectToBe('hello world'[-2], 'l')
+				expectToBe('hello world'[-3], 'r')
+				done()
+			})
+
+			it('should fail for an invalid index', function(done function<void>()) {
+				_, err := 'hi'[4]
+				expectToBe(err is not null, true)
+				done()
+			})
+		})
+
 		describe('operator Slice', function() {
 			it('should return a string for normal indexes', function(done function<void>()) {
 				expectToBe('hello world'[0:5], 'hello')

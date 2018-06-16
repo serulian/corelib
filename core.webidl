@@ -38,6 +38,8 @@ interface String {
   String trim();
   readonly attribute Number length;
 
+  getter String (Number index);
+
   serializer;
 };
 

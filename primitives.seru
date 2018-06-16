@@ -4,7 +4,7 @@ from webidl`core` import Math
 from webidl`core` import Number
 from webidl`core` import String as NativeString
 
-from helpertypes import IntStream
+from helpertypes import IntStream, SimpleError
 
 /**
  * Type marker for functions.
@@ -186,6 +186,23 @@ type String : NativeString {
 
 	operator Plus(first string, second string) {
 		return String(NativeString(first) + NativeString(second))
+	}
+
+	/**
+	 * Index returns the `index`-th character in the string. Note that for unicode characters,
+	 * this *will* index into the code point.
+	 */
+	operator Index(index int) string {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Length + index
+		}
+
+		if finalIndex >= this.Length || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		return String(NativeString(this)[finalIndex])
 	}
 
 	/**
