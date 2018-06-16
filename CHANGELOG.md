@@ -1,5 +1,16 @@
 # Change Log
 
+## [v0.3.0](https://github.com/serulian/corelib/tree/v0.3.0) (2018-06-16)
+[Full Changelog](https://github.com/serulian/corelib/compare/v0.2.0...v0.3.0)
+
+**Implemented enhancements:**
+
+- String improvements [\#11](https://github.com/serulian/corelib/pull/11) ([josephschorr](https://github.com/josephschorr))
+
+**Merged pull requests:**
+
+- Add some additional documentation to various methods [\#10](https://github.com/serulian/corelib/pull/10) ([josephschorr](https://github.com/josephschorr))
+
 ## [v0.2.0](https://github.com/serulian/corelib/tree/v0.2.0) (2017-12-09)
 [Full Changelog](https://github.com/serulian/corelib/compare/v0.1.0...v0.2.0)
 
