@@ -118,6 +118,13 @@ type Float64 : Number {
 	}
 
 	/**
+	 * MapKey returns the key for floats in maps.
+	 */
+	property MapKey stringable {
+		get { return 'float::' + this.String() }
+	}
+
+	/**
 	 * Floor returns the current float rounded down to the nearest integer.
 	 */
 	function Floor() int {
