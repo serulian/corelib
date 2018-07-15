@@ -165,6 +165,27 @@ type Slice<T> : Array {
 		return Slice<T>(arr)
 	}
 
+	/**
+	 * CopyOfList returns a slice from the given `list`.
+	 */
+	constructor CopyOfList(list List<T>) {
+		return Slice<T>.overArray(list.internalArray.slice(0))
+	}
+
+	/**
+	 * Concat returns a slice that is the concatination of the `first` and `second` slices.
+	 */
+	constructor Concat(first Slice<T>, second Slice<T>) {
+		return Slice<T>.overArray(Array(first).concat(&second))
+	}
+
+	/**
+	 * Plus concatinates the two slices.
+	 */
+	operator Plus(left Slice<T>, right Slice<T>) {
+		return Slice<T>.Concat(left, right)
+	}
+
 	operator Slice(startindex int?, endindex int?) Slice<T> {
 		var start = startindex ?? 0
 		var end = endindex ?? this.Length
@@ -193,6 +214,25 @@ type Slice<T> : Array {
 		}
 
 		return Array(this)[Number(finalIndex)].(T)
+	}
+
+	/**
+	 * WithElementAtIndex returns a copy of this slice with the element at `index` replaced
+	 * with the specified `element`. Raises an error if the index it out of bounds.
+	 */
+	function WithElementAtIndex(index int, element T) []T {
+		var finalIndex = index
+		if finalIndex < 0 {
+			finalIndex = this.Length + index
+		}
+
+		if finalIndex >= this.Length || finalIndex < 0 {
+			reject SimpleError.WithMessage('Index is out of bounds')
+		}
+
+		copy := Array(this).slice()
+		copy[finalIndex] = element
+		return Slice<T>(copy)
 	}
 
 	/**
@@ -235,6 +275,13 @@ type Slice<T> : Array {
 		if foundIndex < 0 { return null }
 
 		return foundIndex
+	}
+
+	/**
+	 * WithElement returns a copy of this slice with the `element` appended.
+	 */
+	function WithElement(element T) Slice<T> {
+		return this + [element]
 	}
 
 	operator Contains(value T) {
@@ -302,8 +349,19 @@ class List<T> {
 		return l
 	}
 
+	/**
+	 * FromSlice returns a list populated from the given `slice`.
+	 */
+	constructor FromSlice(slice Slice<T>) {
+		return List<T>.Of(slice.Stream())
+	}
+
 	operator Bool(value List<T>) {
 		return !value.IsEmpty
+	}
+
+	operator Plus(left List<T>, right List<T>) {
+		return List<T>.Concat(left, right)
 	}
 
 	operator Contains(value T) {
@@ -351,6 +409,7 @@ class List<T> {
 		}
 
 		this.internalArray[Number(finalIndex)] = value
+		this.indexArray[Number(finalIndex)] = &value
 	}
 
 	/**
@@ -358,6 +417,13 @@ class List<T> {
 	 */
 	function Stream() stream<T> {
 		return listStream<T>.forList(this)
+	}
+
+	/**
+	 * Slice returns this list as a slice.
+	 */
+	function Slice() []T {
+		return Slice<T>(this.internalArray.slice(0))
 	}
 
 	/**
@@ -516,7 +582,8 @@ class Map<T : mappable, Q> {
 	}
 
 	/**
-	 * Mapping returns the a Mapping of this Map's values.
+	 * Mapping returns the a Mapping of this Map's values. Note that the keys will be the
+	 * MapKey for the items.
 	 */
 	function Mapping() Mapping<Q> {
 		return Mapping<Q>(this.internalObject).Clone()
@@ -527,6 +594,34 @@ class Map<T : mappable, Q> {
 	 */
 	property Keys T* {
 		get { return this.keys.Stream() }
+	}
+
+	/**
+	 * Values returns a stream of all the values in the map.
+	 */
+	property Values Q* {
+		get {
+			for key in this.Keys {
+				value := this[key]
+				if value is not null {
+					yield value
+				}
+			}
+		}
+	}
+
+	/**
+	 * Pairs returns all the key-value pairs in the map.
+	 */
+	property Pairs Tuple<T, Q>*  {
+		get {
+			for key in this.Keys {
+				value := this[key]
+				if value is not null {
+					yield Tuple<T, Q>.Build(key, value)
+				}
+			}
+		}
 	}
 
 	/**

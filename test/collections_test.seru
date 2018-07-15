@@ -102,6 +102,79 @@ function TEST() {
 			})
 		})
 
+		describe('Plus operator', function() {
+			it('should create a slice from the concatination of two slices', function(done function<void>()) {
+				slice := [1, 2] + [3]
+				expectToBe(slice[0], 1)
+				expectToBe(slice[1], 2)
+				expectToBe(slice[2], 3)
+				done()
+			})
+		})
+
+		describe('.Concat()', function() {
+			it('should create a slice from the concatination of two slices', function(done function<void>()) {
+				slice := Slice<int>.Concat([1, 2], [3])
+				expectToBe(slice[0], 1)
+				expectToBe(slice[1], 2)
+				expectToBe(slice[2], 3)
+				done()
+			})
+		})
+
+		describe('.CopyOfList()', function() {
+			it('should create a slice from a list', function(done function<void>()) {
+				list := List<int>.Empty()
+				list.Add(1)
+				list.Add(2)
+				list.Add(3)
+
+				slice := Slice<int>.CopyOfList(list)
+				expectToBe(slice[0], 1)
+				expectToBe(slice[1], 2)
+				expectToBe(slice[2], 3)
+
+				// Modify the list and ensure the slice does not change.
+				list.Add(4)
+
+				expectToBe(slice.Length, 3)
+				done()
+			})
+		})		
+
+		describe('.WithElement()', function() {
+			it('should create append an element to a copy of the slice and return that new slice', function(done function<void>()) {
+				slice := [1, 2].WithElement(3)
+				expectToBe(slice[0], 1)
+				expectToBe(slice[1], 2)
+				expectToBe(slice[2], 3)
+				done()
+			})
+		})
+
+		describe('.WithElementAtIndex()', function() {
+			it('should return a copy of the slice with the element at the index changed', function(done function<void>()) {
+				slice := [1, 2, 3].WithElementAtIndex(1, 4)
+
+				expectToBe(slice[0], 1)
+				expectToBe(slice[1], 4)
+				expectToBe(slice[2], 3)
+
+				nextSlice := slice.WithElementAtIndex(-1, 6)
+				expectToBe(nextSlice[0], 1)
+				expectToBe(nextSlice[1], 4)
+				expectToBe(nextSlice[2], 6)
+
+				done()
+			})
+
+			it('should raise an error for an invalid index', function(done function<void>()) {
+				_, err := [].WithElementAtIndex(0, 0)
+				expectToBe(err is not null, true)
+				done()
+			})
+		})
+
 		describe('Contains operator', function() {
 			it('should return whether the slice contains an element', function(done function<void>()) {
 				expectToBe(0 in [], false)
@@ -228,6 +301,23 @@ function TEST() {
 				l1 := List<int>.Of([1, 2, 3].Stream())
 				l2 := List<int>.Of([4, 5, 6].Stream())
 				concat := List<int>.Concat(l1, l2)
+
+				expectToBe(concat[0], 1)
+				expectToBe(concat[1], 2)
+				expectToBe(concat[2], 3)
+
+				expectToBe(concat[3], 4)
+				expectToBe(concat[4], 5)
+				expectToBe(concat[5], 6)
+				done()
+			})
+		})
+
+		describe('Plus operator', function() {
+			it('should return list that contains the contents of both lists', function(done function<void>()) {
+				l1 := List<int>.FromSlice([1, 2, 3])
+				l2 := List<int>.FromSlice([4, 5, 6])
+				concat := l1 + l2
 
 				expectToBe(concat[0], 1)
 				expectToBe(concat[1], 2)
@@ -547,6 +637,36 @@ function TEST() {
 				keys := Set<string>.Of(m.Keys)
 				expectToBe('hello' in keys, true)
 				expectToBe('world' in keys, true)
+				done()
+			})
+		})
+
+		describe('.Values', function() {
+			it('should a stream of all the values in the Map', function(done function<void>()) {
+				m := Map<string, int>.Empty()
+				m['hello'] = 2
+				m['world'] = 3
+
+				values := Set<int>.Of(m.Values)
+				expectToBe(2 in values, true)
+				expectToBe(3 in values, true)
+				done()
+			})
+		})
+
+		describe('.Pairs', function() {
+			it('should a stream of all the key-value pairs in the Map', function(done function<void>()) {
+				m := Map<string, int>.Empty()
+				m['hello'] = 2
+				m['world'] = 3
+
+				keys := Set<string>.Of(pair.First! for pair in m.Pairs)
+				expectToBe('hello' in keys, true)
+				expectToBe('world' in keys, true)
+
+				values := Set<int>.Of(pair.Second! for pair in m.Pairs)
+				expectToBe(2 in values, true)
+				expectToBe(3 in values, true)
 				done()
 			})
 		})
