@@ -376,6 +376,7 @@ class List<T> {
 		var index = this.IndexOf(element)
 		if index is null { return }
 
+		this.indexArray.splice(Number(index), Number(1))
 		this.internalArray.splice(Number(index), Number(1))
 	}
 

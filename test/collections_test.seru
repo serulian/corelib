@@ -386,6 +386,27 @@ function TEST() {
 				expectToBe(l.IndexOf(2, 2), null)
 				done()
 			})
+
+			it('should respect the addition and removal of items', function(done function<void>()) {
+				l := List<int>.Of([1, 2, 3].Stream())
+				expectToBe(l.IndexOf(1), 0)
+				expectToBe(l.IndexOf(2), 1)
+				expectToBe(l.IndexOf(3), 2)
+
+				l.Add(4)
+				expectToBe(l.IndexOf(4), 3)
+
+				l.Remove(4)
+				expectToBe(l.IndexOf(4), null)
+
+				l.Remove(1)
+				expectToBe(l.IndexOf(1), null)
+
+				expectToBe(l.IndexOf(2), 0)
+				expectToBe(l.IndexOf(3), 1)
+
+				done()
+			})
 		})
 
 		describe('Bool operator', function() {
