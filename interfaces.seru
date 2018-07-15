@@ -50,7 +50,8 @@ interface Streamable<T> {
 @•typealias('mappable')
 interface Mappable {
 	/**
-	 * MapKey returns the stringable mapping key for this type.
+	 * MapKey returns the stringable mapping key for this type. This key should be unique
+	 * for instances that are the same.
 	 */
 	property MapKey Stringable { get }
 }
