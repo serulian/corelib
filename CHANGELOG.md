@@ -1,5 +1,12 @@
 # Change Log
 
+## [v0.3.1](https://github.com/serulian/corelib/tree/v0.3.1) (2018-07-15)
+[Full Changelog](https://github.com/serulian/corelib/compare/v0.3.0...v0.3.1)
+
+**Implemented enhancements:**
+
+- A set of collection improvements [\#12](https://github.com/serulian/corelib/pull/12) ([josephschorr](https://github.com/josephschorr))
+
 ## [v0.3.0](https://github.com/serulian/corelib/tree/v0.3.0) (2018-06-16)
 [Full Changelog](https://github.com/serulian/corelib/compare/v0.2.0...v0.3.0)
 
